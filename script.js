@@ -35,34 +35,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Sticky CTA visibility on mobile
+// Sticky CTA visibility
 let lastScrollTop = 0;
 const stickyCTA = document.getElementById('sticky-cta');
 const bookingSection = document.getElementById('booking');
 
-window.addEventListener('scroll', function() {
-    if (window.innerWidth <= 968) {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const bookingSectionTop = bookingSection.offsetTop;
-        const windowHeight = window.innerHeight;
-
-        // Show sticky CTA when scrolling down and not at booking section
-        if (scrollTop > 300 && (scrollTop + windowHeight) < bookingSectionTop) {
-            stickyCTA.style.transform = 'translateY(0)';
-            stickyCTA.style.opacity = '1';
-        } else {
-            stickyCTA.style.transform = 'translateY(100%)';
-            stickyCTA.style.opacity = '0';
-        }
-    }
-}, { passive: true });
-
-// Initialize sticky CTA styles
+// Initialize sticky CTA styles - visible by default
 if (stickyCTA) {
     stickyCTA.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-    stickyCTA.style.transform = 'translateY(100%)';
-    stickyCTA.style.opacity = '0';
+    stickyCTA.style.transform = 'translateY(0)';
+    stickyCTA.style.opacity = '1';
 }
+
+window.addEventListener('scroll', function() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const bookingSectionTop = bookingSection.offsetTop;
+    const windowHeight = window.innerHeight;
+
+    // Hide sticky CTA only when user reaches the booking section
+    if ((scrollTop + windowHeight) >= bookingSectionTop) {
+        stickyCTA.style.transform = 'translateY(100%)';
+        stickyCTA.style.opacity = '0';
+    } else {
+        stickyCTA.style.transform = 'translateY(0)';
+        stickyCTA.style.opacity = '1';
+    }
+}, { passive: true });
 
 // Track scroll depth for analytics (optional)
 let maxScrollDepth = 0;
