@@ -777,44 +777,28 @@ p {
     font-style: italic;
 }
 
-/* STICKY CTA */
+/* STICKY CTA - Recreated */
 .sticky-cta {
     position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
-    background: transparent;
-    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
     margin: 0;
+    background: transparent;
     border: none;
     outline: none;
-    animation: floatIn 0.6s ease-out, pulse 3s ease-in-out infinite 2s;
-}
-
-@keyframes floatIn {
-    from {
-        transform: translateX(-50%) translateY(100px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: translateX(-50%) scale(1);
-    }
-    50% {
-        transform: translateX(-50%) scale(1.05);
-    }
+    pointer-events: none;
 }
 
 .sticky-cta .btn {
     display: inline-block;
     padding: 16px 32px;
+    margin-bottom: 10px;
     font-size: 1.125rem;
     font-weight: 600;
     font-family: var(--font-primary);
@@ -826,11 +810,24 @@ p {
     box-shadow: 0 8px 30px rgba(37, 99, 235, 0.3);
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.3s ease;
+    pointer-events: all;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .sticky-cta .btn:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: 0 12px 40px rgba(37, 99, 235, 0.5);
 }
 
@@ -840,38 +837,21 @@ p {
 }
 
 .sticky-cta .btn:active {
-    transform: scale(0.95);
+    transform: translateY(-1px) scale(0.98);
 }
 
-/* Mobile: Full-width bottom bar */
+/* Mobile sticky CTA */
 @media (max-width: 768px) {
     .sticky-cta {
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        transform: none;
         padding: 16px 20px;
         background: white;
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-        border-radius: 0;
-        animation: slideUp 0.4s ease-out;
-    }
-
-    @keyframes slideUp {
-        from {
-            transform: translateY(100%);
-        }
-        to {
-            transform: translateY(0);
-        }
     }
 
     .sticky-cta .btn {
         width: 100%;
+        margin-bottom: 0;
         border-radius: 8px;
-        border: none;
-        outline: none;
     }
 }
 
