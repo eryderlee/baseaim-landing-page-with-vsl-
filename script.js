@@ -174,6 +174,82 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Sticky video functionality - minimizes to corner when scrolled past
+document.addEventListener('DOMContentLoaded', function() {
+    const heroVideoSection = document.querySelector('.hero-video');
+    const videoWrapper = heroVideoSection ? heroVideoSection.querySelector('.video-wrapper') : null;
+    const mediaElement = videoWrapper ? videoWrapper.querySelector('iframe, video') : null;
+
+    if (!heroVideoSection || !videoWrapper || !mediaElement) {
+        return;
+    }
+
+    // Inject a dismiss button so users can close the floating player
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'sticky-video-close';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Close mini player');
+    videoWrapper.appendChild(closeBtn);
+
+    // Placeholder maintains layout height when the player becomes fixed
+    const placeholder = document.createElement('div');
+    const initialVideoHeight = videoWrapper.getBoundingClientRect().height || videoWrapper.offsetHeight || 0;
+    placeholder.style.width = '100%';
+    placeholder.style.height = initialVideoHeight + 'px';
+    placeholder.style.display = 'none';
+    videoWrapper.parentNode.insertBefore(placeholder, videoWrapper);
+    const originalParent = placeholder.parentNode;
+
+    let stickyDismissed = false;
+
+    closeBtn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        stickyDismissed = true;
+        videoWrapper.classList.remove('sticky');
+        placeholder.style.display = 'none';
+        if (videoWrapper.parentElement !== originalParent) {
+            originalParent.insertBefore(videoWrapper, placeholder.nextSibling);
+        }
+    });
+
+    const updatePlaceholderHeight = () => {
+        const currentHeight = videoWrapper.classList.contains('sticky')
+            ? initialVideoHeight
+            : videoWrapper.getBoundingClientRect().height || initialVideoHeight;
+        placeholder.style.height = currentHeight + 'px';
+    };
+
+    const toggleSticky = () => {
+        const heroRect = heroVideoSection.getBoundingClientRect();
+
+        if (heroRect.bottom <= 0) {
+            if (!stickyDismissed) {
+                if (videoWrapper.parentElement !== document.body) {
+                    document.body.appendChild(videoWrapper);
+                }
+                videoWrapper.classList.add('sticky');
+                placeholder.style.display = 'block';
+            }
+        } else {
+            videoWrapper.classList.remove('sticky');
+            placeholder.style.display = 'none';
+            if (videoWrapper.parentElement !== originalParent) {
+                originalParent.insertBefore(videoWrapper, placeholder.nextSibling);
+            }
+            stickyDismissed = false;
+        }
+    };
+
+    window.addEventListener('scroll', toggleSticky, { passive: true });
+    window.addEventListener('resize', () => {
+        updatePlaceholderHeight();
+        toggleSticky();
+    });
+
+    updatePlaceholderHeight();
+    toggleSticky();
+});
+
 // Console message for developers
 console.log('%cBaseaim Landing Page', 'color: #2563eb; font-size: 20px; font-weight: bold;');
 console.log('%cBuilt for high conversion', 'color: #64748b; font-size: 14px;');

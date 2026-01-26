@@ -353,11 +353,23 @@ p {
 
 .headline {
     font-family: var(--font-headings);
-    font-size: clamp(2rem, 5vw, 3rem);
-    line-height: 1.1;
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    line-height: 1.15;
     margin-bottom: 1.5rem;
-    color: var(--text-dark);
+    color: var(--text-charcoal);
     font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+/* Headline highlight - bold solid color for key phrases */
+.headline-highlight {
+    background: linear-gradient(100deg, #50a8ff 0%, #0065ff 60%, #0040c1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
 }
 
 .video-intro {
@@ -380,12 +392,76 @@ p {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
-.hero-video .video-wrapper iframe {
+.hero-video .video-wrapper iframe,
+.hero-video .video-wrapper video {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+/* Sticky video - minimized to corner when scrolling */
+.video-wrapper.sticky {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    top: auto !important;
+    left: auto !important;
+    width: 320px !important;
+    height: 180px !important;
+    padding-bottom: 0 !important;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: visible;
+    border-radius: 12px;
+}
+
+.video-wrapper.sticky iframe,
+.video-wrapper.sticky video {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 12px;
+}
+
+/* Close button for sticky video */
+.sticky-video-close {
+    display: none;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 28px;
+    height: 28px;
+    background: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 1001;
+    transition: background 0.2s ease;
+}
+
+.sticky-video-close:hover {
+    background: #ef4444;
+}
+
+.video-wrapper.sticky .sticky-video-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive sticky video */
+@media (max-width: 640px) {
+    .video-wrapper.sticky {
+        width: 200px !important;
+        height: 112px !important;
+        bottom: 80px !important; /* Above sticky CTA */
+        right: 10px !important;
+    }
 }
 
 .hero-details {
@@ -990,6 +1066,7 @@ p {
 
     .headline {
         font-size: 1.875rem;
+        line-height: 1.2;
     }
 
     h2 {
