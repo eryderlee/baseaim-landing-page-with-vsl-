@@ -626,6 +626,14 @@ p {
     box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
 }
 
+.testimonial-stars {
+    color: #f59e0b;
+    font-size: 1.25rem;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
 .testimonial-text {
     font-size: 1.125rem;
     color: var(--text-medium-gray);
