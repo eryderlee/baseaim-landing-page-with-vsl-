@@ -129,7 +129,7 @@
     // =============================================
     function trackEngagement() {
         // --- Time on page (active tab only) ---
-        var milestones = [1, 5, 10, 15, 30, 60, 120];
+        var milestones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 30, 60, 120];
         var elapsed = 0;
         var nextIndex = 0;
         var timerActive = !document.hidden;
