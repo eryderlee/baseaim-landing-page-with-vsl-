@@ -125,6 +125,98 @@
     }
 
     // =============================================
+    // ENGAGEMENT TRACKING — time, scroll, video
+    // =============================================
+    function trackEngagement() {
+        // --- Time on page (active tab only) ---
+        var milestones = [1, 5, 10, 15, 30, 60, 120];
+        var elapsed = 0;
+        var nextIndex = 0;
+        var timerActive = !document.hidden;
+
+        setInterval(function () {
+            if (!timerActive || nextIndex >= milestones.length) return;
+            elapsed++;
+            if (elapsed >= milestones[nextIndex]) {
+                window.dataLayer.push({
+                    event: 'ab_time_on_page',
+                    seconds: milestones[nextIndex],
+                    ab_test_variant: variant
+                });
+                nextIndex++;
+            }
+        }, 1000);
+
+        document.addEventListener('visibilitychange', function () {
+            timerActive = !document.hidden;
+        });
+
+        // --- Scroll depth milestones ---
+        var scrollFired = {};
+        var scrollThresholds = [25, 50, 75, 100];
+
+        window.addEventListener('scroll', function () {
+            var pct = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+            for (var i = 0; i < scrollThresholds.length; i++) {
+                var t = scrollThresholds[i];
+                if (pct >= t && !scrollFired[t]) {
+                    scrollFired[t] = true;
+                    window.dataLayer.push({
+                        event: 'ab_scroll_depth',
+                        depth: t,
+                        ab_test_variant: variant
+                    });
+                }
+            }
+        }, { passive: true });
+
+        // --- Video engagement ---
+        var video = document.querySelector('.hero-video video');
+        if (video) {
+            var videoFired = {};
+
+            video.addEventListener('play', function () {
+                if (!videoFired.play) {
+                    videoFired.play = true;
+                    window.dataLayer.push({
+                        event: 'ab_video_engagement',
+                        action: 'play',
+                        ab_test_variant: variant
+                    });
+                }
+            });
+
+            video.addEventListener('timeupdate', function () {
+                if (!video.duration) return;
+                var pct = Math.round(video.currentTime / video.duration * 100);
+                var checkpoints = [25, 50, 75];
+                for (var i = 0; i < checkpoints.length; i++) {
+                    var cp = checkpoints[i];
+                    if (pct >= cp && !videoFired['progress_' + cp]) {
+                        videoFired['progress_' + cp] = true;
+                        window.dataLayer.push({
+                            event: 'ab_video_engagement',
+                            action: 'progress_' + cp,
+                            ab_test_variant: variant
+                        });
+                    }
+                }
+            });
+
+            video.addEventListener('ended', function () {
+                if (!videoFired.complete) {
+                    videoFired.complete = true;
+                    window.dataLayer.push({
+                        event: 'ab_video_engagement',
+                        action: 'complete',
+                        ab_test_variant: variant
+                    });
+                }
+            });
+        }
+    }
+
+    // =============================================
     // INIT
     // =============================================
     if (document.readyState === 'loading') {
@@ -132,11 +224,13 @@
             applyVariants();
             trackAssignment();
             setupConversionTracking();
+            trackEngagement();
         });
     } else {
         applyVariants();
         trackAssignment();
         setupConversionTracking();
+        trackEngagement();
     }
 
     // =============================================
