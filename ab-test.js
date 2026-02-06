@@ -17,7 +17,7 @@
             },
             B: {
                 // REPLACE with your variant B headline
-                html: 'Your New Headline <span class="headline-highlight">Highlighted Part</span>',
+                html: 'Get <span class="headline-highlight">Garunteed results...</span> or you<span class="headline-highlight"> Don\'t Pay Us</span>',
                 version: 'variant_b'
             }
         },
@@ -29,8 +29,8 @@
             },
             B: {
                 // REPLACE with your variant B video file and poster
-                src: 'vsl-variant-b.mp4',
-                poster: 'hero-poster-b.jpeg',
+                src: 'vsl mp4.mp4',
+                poster: 'hero-poster.jpeg',
                 version: 'variant_b'
             }
         }
@@ -189,7 +189,7 @@
             video.addEventListener('timeupdate', function () {
                 if (!video.duration) return;
                 var pct = Math.round(video.currentTime / video.duration * 100);
-                var checkpoints = [25, 50, 75];
+                var checkpoints = [1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 75];
                 for (var i = 0; i < checkpoints.length; i++) {
                     var cp = checkpoints[i];
                     if (pct >= cp && !videoFired['progress_' + cp]) {
