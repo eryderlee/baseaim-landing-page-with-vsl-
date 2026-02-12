@@ -151,7 +151,7 @@
             timerActive = !document.hidden;
         });
 
-        // --- Scroll depth milestones ---
+        // --- Scroll depth milestones (percentage) ---
         var scrollFired = {};
         var scrollThresholds = [25, 50, 75, 100];
 
@@ -169,6 +169,35 @@
                 }
             }
         }, { passive: true });
+
+        // --- Section visibility tracking ---
+        var sections = [
+            { id: 'hero', name: 'Hero' },
+            { id: 'trust', name: 'Trust & Story' },
+            { id: 'how-it-works', name: 'How It Works' },
+            { id: 'guarantee', name: 'Guarantee' },
+            { id: 'faq', name: 'FAQ' },
+            { id: 'booking', name: 'Booking' }
+        ];
+        var sectionFired = {};
+
+        sections.forEach(function (sec) {
+            var el = document.getElementById(sec.id);
+            if (el && window.IntersectionObserver) {
+                var obs = new IntersectionObserver(function (entries) {
+                    if (entries[0].isIntersecting && !sectionFired[sec.id]) {
+                        sectionFired[sec.id] = true;
+                        window.dataLayer.push({
+                            event: 'ab_section_viewed',
+                            section_name: sec.name,
+                            ab_test_variant: variant
+                        });
+                        obs.disconnect();
+                    }
+                }, { threshold: 0.3 });
+                obs.observe(el);
+            }
+        });
 
         // --- Video engagement ---
         var video = document.querySelector('.hero-video video');
