@@ -103,16 +103,30 @@ p {
     display: block;
 }
 
-.trustpilot-badge {
-    text-align: center;
-    margin-bottom: 0.5rem;
-    margin-top: 10px;
+.review-slider {
+    margin: 1.5rem auto 2.5rem;
+    max-width: 540px;
+    overflow: hidden;
 }
 
-.trustpilot-badge img {
-    width: 120px;
-    height: auto;
-    display: inline-block;
+.review-slider .slider-track {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: max-content;
+    animation: reviewScroll 22s linear infinite;
+}
+
+.review-slider .slider-track:hover {
+    animation-play-state: paused;
+}
+
+.review-logo {
+    height: 64px;
+    width: auto;
+    flex-shrink: 0;
+    display: block;
+    filter: drop-shadow(0 8px 24px rgba(10, 46, 110, 0.15));
 }
 
 /* Buttons */
@@ -413,6 +427,216 @@ p {
     height: 100%;
 }
 
+.custom-video-ui {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.25rem 1.5rem 1.75rem;
+    background: linear-gradient(180deg, rgba(3, 7, 18, 0) 0%, rgba(3, 7, 18, 0.8) 70%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+}
+
+.video-wrapper.sticky .custom-video-ui {
+    padding: 0.75rem 1rem 1rem;
+    gap: 0.75rem;
+}
+
+.video-wrapper.intro-state .custom-video-ui {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.video-wrapper.intro-state .video-progress {
+    opacity: 0;
+}
+
+.video-play-toggle {
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(15, 23, 42, 0.75);
+    color: #fff;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.video-play-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-1px);
+}
+
+.video-play-toggle:focus-visible {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
+.video-icon {
+    width: 12px;
+    height: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.video-icon::before,
+.video-icon::after {
+    content: '';
+    position: absolute;
+}
+
+.video-icon-play::before {
+    border-style: solid;
+    border-width: 6px 0 6px 10px;
+    border-color: transparent transparent transparent #fff;
+    left: 1px;
+}
+
+.video-icon-pause {
+    display: none;
+}
+
+.video-icon-pause::before,
+.video-icon-pause::after {
+    width: 3px;
+    height: 12px;
+    background: #fff;
+    border-radius: 1px;
+}
+
+.video-icon-pause::before {
+    left: 0;
+}
+
+.video-icon-pause::after {
+    right: 0;
+}
+
+.video-play-toggle[data-state="pause"] .video-icon-play {
+    display: none;
+}
+
+.video-play-toggle[data-state="pause"] .video-icon-pause {
+    display: inline-flex;
+}
+
+.video-progress {
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    position: relative;
+}
+
+.video-progress::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+}
+
+.video-progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 25%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.95), rgba(59, 130, 246, 0.95));
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+    transition: width 0.35s ease;
+}
+
+.video-wrapper.sticky .video-play-toggle {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.85rem;
+}
+
+.video-wrapper.sticky .video-progress {
+    height: 4px;
+}
+
+.video-wrapper.hide-controls .custom-video-ui {
+    opacity: 0;
+}
+
+.video-wrapper:hover .custom-video-ui,
+.video-wrapper.hide-controls:hover .custom-video-ui {
+    opacity: 1;
+}
+
+.video-overlay-play {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(2, 6, 23, 0.55), rgba(2, 6, 23, 0.35));
+    opacity: 1;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.video-centered-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: rgba(15, 23, 42, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.25s ease, background 0.25s ease, opacity 0.3s ease;
+    z-index: 2;
+    color: transparent;
+}
+
+.video-centered-play .video-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.video-centered-play .video-icon::before {
+    border-width: 10px 0 10px 18px;
+}
+
+.video-centered-play:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    background: rgba(37, 99, 235, 0.75);
+}
+
+.video-wrapper:not(.intro-state) .video-overlay-play,
+.video-wrapper:not(.intro-state) .video-centered-play {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.video-wrapper.sticky .video-centered-play {
+    display: none;
+}
+
 .hero-details .limited-spots-pill {
     margin: 0 auto 1.5rem;
 }
@@ -611,6 +835,106 @@ p {
     margin-bottom: 1.5rem;
 }
 
+.frustration-card {
+    background: #FFFFFF;
+    border-radius: 28px;
+    padding: 2.5rem;
+    box-shadow: 0 25px 65px rgba(10, 46, 110, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.08);
+}
+
+.card-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-light-gray);
+    margin-bottom: 1.5rem;
+}
+
+.insight-panel {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 25px 50px rgba(37, 99, 235, 0.08);
+    margin-bottom: 2.5rem;
+    border: 1px solid rgba(37, 99, 235, 0.06);
+}
+
+.insight-panel h3 {
+    margin-bottom: 1.25rem;
+}
+
+.insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.diagnosis-list {
+    list-style: none;
+    margin: 1.5rem 0;
+    padding: 0;
+}
+
+.diagnosis-list li {
+    margin-bottom: 1rem;
+    padding: 1rem 1.25rem;
+    background: #F8FCFF;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 118, 255, 0.1);
+}
+
+.diag-item-title {
+    font-weight: 600;
+    color: var(--text-dark);
+    display: block;
+}
+
+.diag-item-note {
+    display: block;
+    font-size: 1rem;
+    color: var(--text-medium-gray);
+    margin-top: 0.35rem;
+}
+
+.panel-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-blue);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.diagnosis-panel .panel-tag {
+    background: rgba(15, 118, 255, 0.12);
+    color: #0f6eff;
+}
+
+.shift-panel .panel-tag {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--success-green);
+}
+
+.panel-lede {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.panel-outro {
+    margin-top: 1.5rem;
+    font-weight: 500;
+    color: var(--text-medium-gray);
+}
+
 /* Benefit Cards */
 .benefit-cards {
     display: grid;
@@ -714,6 +1038,76 @@ p {
     font-weight: 600;
 }
 
+.momentum-copy {
+    text-align: center;
+    margin: 2.5rem auto;
+    padding: 1.75rem 2rem;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    box-shadow: 0 18px 45px rgba(10, 46, 110, 0.1);
+    max-width: 520px;
+    display: grid;
+    gap: 0.4rem;
+}
+
+.momentum-copy p {
+    margin: 0;
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 1.125rem;
+}
+
+.momentum-copy p:last-child {
+    color: var(--primary-blue);
+    font-size: 1.2rem;
+}
+
+.proof {
+    padding: var(--section-padding);
+    background: var(--bg-white);
+}
+
+.proof h2 {
+    margin-bottom: 1rem;
+}
+
+.decision-bridge {
+    padding: var(--section-padding);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(75, 126, 255, 0.15));
+    text-align: center;
+}
+
+.decision-bridge p {
+    max-width: 720px;
+    margin: 1rem auto 0;
+    font-size: 1.2rem;
+}
+
+.cta-simple {
+    padding: var(--section-padding);
+    background: var(--deep-blue);
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.cta-simple h2,
+.cta-simple p {
+    color: #FFFFFF;
+}
+
+.cta-simple .benefits {
+    margin-top: 1.5rem;
+}
+
+.cta-simple .benefits li {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.cta-simple .benefits li:before {
+    color: var(--light-blue);
+}
+
 /* SECTION 3: HOW IT WORKS */
 .how-it-works {
     padding: var(--section-padding);
@@ -790,13 +1184,13 @@ p {
     width: 100px;
     height: 100px;
     margin: 0 auto 2.5rem;
-    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, var(--success-green) 0%, #34d399 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.25);
+    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
 }
 
 .guarantee-badge svg {
@@ -1182,6 +1576,19 @@ p {
 
     .wave-3 {
         animation-duration: 65s;
+    }
+
+    .review-logo {
+        height: 48px;
+    }
+}
+
+@keyframes reviewScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
     }
 }
 

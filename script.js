@@ -174,6 +174,226 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Custom hero video controls with faux slider timing
+document.addEventListener('DOMContentLoaded', function() {
+    const heroVideo = document.getElementById('hero-vsl');
+    const customControls = document.querySelector('.custom-video-ui');
+
+    if (!heroVideo || !customControls) {
+        return;
+    }
+
+    const INITIAL_PROGRESS = 0.25;
+    const videoWrapper = heroVideo.closest('.video-wrapper');
+    const playToggle = customControls.querySelector('.video-play-toggle');
+    const overlayPlayButton = videoWrapper ? videoWrapper.querySelector('.video-centered-play') : null;
+    const progressBar = customControls.querySelector('.video-progress');
+    const progressFill = customControls.querySelector('.video-progress-fill');
+    let rafId = null;
+    let hideControlsTimeout = null;
+    let hasStarted = false;
+    const CONTROLS_HIDE_DELAY = 15000;
+
+    const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
+
+    const setProgress = (ratio) => {
+        const clamped = clamp(ratio);
+        if (progressFill) {
+            progressFill.style.width = `${(clamped * 100).toFixed(2)}%`;
+        }
+        if (progressBar) {
+            progressBar.setAttribute('aria-valuenow', String(Math.round(clamped * 100)));
+        }
+    };
+
+    const calculateFauxProgress = (currentTime, duration) => {
+        if (!duration || duration === Infinity) {
+            return INITIAL_PROGRESS;
+        }
+
+        const safeTime = clamp(currentTime, 0, duration);
+        const fastPhaseEnd = Math.min(5, duration * 0.3);
+        const milestoneTime = Math.min(50, duration * 0.9);
+        const midPhaseDuration = Math.max(milestoneTime - fastPhaseEnd, 0.1);
+        const tailDuration = Math.max(duration - milestoneTime, duration * 0.1, 0.1);
+
+        if (safeTime <= 0) {
+            return INITIAL_PROGRESS;
+        }
+
+        if (safeTime <= fastPhaseEnd) {
+            const ratio = fastPhaseEnd > 0 ? safeTime / fastPhaseEnd : 1;
+            return INITIAL_PROGRESS + ratio * 0.25; // up to ~50%
+        }
+
+        if (safeTime <= milestoneTime) {
+            const ratio = Math.min((safeTime - fastPhaseEnd) / midPhaseDuration, 1);
+            return 0.5 + ratio * 0.3; // climb to ~80% by milestone
+        }
+
+        if (safeTime < duration) {
+            const ratio = clamp((safeTime - milestoneTime) / tailDuration);
+            const eased = 1 - Math.pow(1 - ratio, 2);
+            return 0.8 + eased * 0.2;
+        }
+
+        return 1;
+    };
+
+    const updateButtonState = () => {
+        if (!playToggle) {
+            return;
+        }
+
+        const isPaused = heroVideo.paused || heroVideo.ended;
+        playToggle.dataset.state = isPaused ? 'play' : 'pause';
+        playToggle.setAttribute('aria-label', isPaused ? 'Play video' : 'Stop video');
+    };
+
+    const clearHideControlsTimeout = () => {
+        if (hideControlsTimeout) {
+            clearTimeout(hideControlsTimeout);
+            hideControlsTimeout = null;
+        }
+    };
+
+    const hideControls = () => {
+        if (!videoWrapper || heroVideo.paused || heroVideo.ended) {
+            return;
+        }
+        videoWrapper.classList.add('hide-controls');
+    };
+
+    const scheduleHideControls = () => {
+        clearHideControlsTimeout();
+        if (heroVideo.paused || heroVideo.ended) {
+            return;
+        }
+        hideControlsTimeout = setTimeout(hideControls, CONTROLS_HIDE_DELAY);
+    };
+
+    const showControls = (autoHide = true) => {
+        if (!videoWrapper) {
+            return;
+        }
+        videoWrapper.classList.remove('hide-controls');
+        if (autoHide) {
+            scheduleHideControls();
+        } else {
+            clearHideControlsTimeout();
+        }
+    };
+
+    const updateProgressDisplay = () => {
+        const fauxRatio = heroVideo.ended ? 1 : calculateFauxProgress(heroVideo.currentTime, heroVideo.duration);
+        setProgress(fauxRatio);
+    };
+
+    const animateProgress = () => {
+        updateProgressDisplay();
+
+        if (!heroVideo.paused && !heroVideo.ended) {
+            rafId = requestAnimationFrame(animateProgress);
+        }
+    };
+
+    const stopProgressAnimation = () => {
+        if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+        }
+    };
+
+    const toggleVideoPlayback = () => {
+        if (heroVideo.paused || heroVideo.ended) {
+            heroVideo.play();
+        } else {
+            heroVideo.pause();
+        }
+    };
+
+    const exitIntroState = () => {
+        if (!videoWrapper || hasStarted) {
+            return;
+        }
+        hasStarted = true;
+        videoWrapper.classList.remove('intro-state');
+    };
+
+    const handleActivePointer = () => {
+        showControls(true);
+    };
+
+    if (videoWrapper) {
+        videoWrapper.addEventListener('mousemove', handleActivePointer);
+        videoWrapper.addEventListener('pointerdown', handleActivePointer);
+        videoWrapper.addEventListener('touchstart', handleActivePointer, { passive: true });
+        videoWrapper.addEventListener('mouseleave', () => {
+            if (!heroVideo.paused) {
+                scheduleHideControls();
+            }
+        });
+    }
+
+    heroVideo.controls = false;
+    setProgress(INITIAL_PROGRESS);
+    updateButtonState();
+    showControls(false);
+
+    heroVideo.addEventListener('play', () => {
+        exitIntroState();
+        updateButtonState();
+        stopProgressAnimation();
+        animateProgress();
+        showControls(true);
+    });
+
+    heroVideo.addEventListener('pause', () => {
+        updateButtonState();
+        stopProgressAnimation();
+        updateProgressDisplay();
+        showControls(false);
+    });
+
+    heroVideo.addEventListener('ended', () => {
+        stopProgressAnimation();
+        setProgress(1);
+        updateButtonState();
+        showControls(false);
+    });
+
+    heroVideo.addEventListener('timeupdate', updateProgressDisplay);
+    heroVideo.addEventListener('loadedmetadata', () => {
+        setProgress(INITIAL_PROGRESS);
+        updateProgressDisplay();
+        showControls(false);
+    });
+
+    heroVideo.addEventListener('click', toggleVideoPlayback);
+    heroVideo.addEventListener('keydown', (event) => {
+        if (event.code === 'Space' || event.code === 'Enter') {
+            event.preventDefault();
+            toggleVideoPlayback();
+        }
+        showControls(true);
+    });
+
+    if (playToggle) {
+        playToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleVideoPlayback();
+            showControls(true);
+        });
+    }
+
+    if (overlayPlayButton) {
+        overlayPlayButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleVideoPlayback();
+        });
+    }
+});
+
 // Sticky video functionality - minimizes to corner when scrolled past
 document.addEventListener('DOMContentLoaded', function() {
     const heroVideoSection = document.querySelector('.hero-video');
