@@ -40,6 +40,18 @@ let lastScrollTop = 0;
 const stickyCTA = document.getElementById('sticky-cta');
 const bookingSection = document.getElementById('booking');
 
+function updateStickyCTAHeight() {
+    if (!stickyCTA) {
+        return;
+    }
+    const height = stickyCTA.getBoundingClientRect().height || stickyCTA.offsetHeight || 0;
+    document.documentElement.style.setProperty('--sticky-cta-height', `${Math.ceil(height)}px`);
+}
+
+updateStickyCTAHeight();
+window.addEventListener('resize', updateStickyCTAHeight);
+window.addEventListener('orientationchange', updateStickyCTAHeight);
+
 // Initialize sticky CTA styles - visible by default
 if (stickyCTA) {
     stickyCTA.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
