@@ -1,0 +1,19 @@
+[    1726ms] [WARNING] `markdownToSafeHTML` should not be imported on the client side. @ https://cal.com/_next/static/chunks/bb68631b9b97d50f.js:8
+[    1759ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3333/favicon.ico:0
+[    1786ms] [WARNING] [DEPRECATED] Use `createWithEqualityFn` instead of `create` or use `useStoreWithEqualityFn` instead of `useStore`. They can be imported from 'zustand/traditional'. https://github.com/pmndrs/zustand/discussions/1937 @ https://cal.com/_next/static/chunks/bb68631b9b97d50f.js:8
+[    1788ms] [WARNING] react-i18next:: You will need to pass in an i18next instance by using initReactI18next @ https://cal.com/_next/static/chunks/bb68631b9b97d50f.js:8
+[    2240ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://cal.com/api/trpc/calendars/connectedCalendars?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22skipSync%22%3Atrue%7D%7D%7D:0
+[    2241ms] [ERROR] %c << query #1 %cviewer.calendars.connectedCalendars%c %O 
+    background-color: #3fb0d8;
+    color: white;
+    padding: 2px;
+   
+    background-color: #3fb0d8;
+    color: white;
+    padding: 2px;
+  ; font-weight: bold; 
+    background-color: #3fb0d8;
+    color: white;
+    padding: 2px;
+  ; font-weight: normal; {input: Object, result: TRPCClientError: UNAUTHORIZED
+    at D.from (https://cal.com/_next/static/chunks/51c1ac3422eee093.j…, elapsedMs: 417, context: Object} @ https://cal.com/_next/static/chunks/bb68631b9b97d50f.js:8

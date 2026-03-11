@@ -198,6 +198,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const INITIAL_PROGRESS = 0.25;
     const videoWrapper = heroVideo.closest('.video-wrapper');
     const playToggle = customControls.querySelector('.video-play-toggle');
+    const volumeControl = customControls.querySelector('.video-volume');
+    const volumeToggle = volumeControl ? volumeControl.querySelector('.video-volume-toggle') : null;
+    const volumeSlider = volumeControl ? volumeControl.querySelector('input[type="range"]') : null;
     const overlayPlayButton = videoWrapper ? videoWrapper.querySelector('.video-centered-play') : null;
     const progressBar = customControls.querySelector('.video-progress');
     const progressFill = customControls.querySelector('.video-progress-fill');
@@ -205,6 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let hideControlsTimeout = null;
     let hasStarted = false;
     const CONTROLS_HIDE_DELAY = 15000;
+    let lastNonZeroVolume = heroVideo.volume > 0 ? heroVideo.volume : 0.75;
 
     const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 
@@ -296,6 +300,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    const setOverlayVisibility = (shouldShow) => {
+        if (!videoWrapper) {
+            return;
+        }
+        if (shouldShow) {
+            videoWrapper.classList.add('show-play-overlay');
+        } else {
+            videoWrapper.classList.remove('show-play-overlay');
+        }
+    };
+
     const updateProgressDisplay = () => {
         const fauxRatio = heroVideo.ended ? 1 : calculateFauxProgress(heroVideo.currentTime, heroVideo.duration);
         setProgress(fauxRatio);
@@ -324,12 +339,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    const syncVolumeUI = () => {
+        if (volumeToggle) {
+            const isMuted = heroVideo.muted || heroVideo.volume === 0;
+            volumeToggle.dataset.muted = isMuted ? 'true' : 'false';
+            volumeToggle.setAttribute('aria-label', isMuted ? 'Unmute video' : 'Mute video');
+        }
+
+        if (volumeSlider) {
+            const value = heroVideo.muted ? 0 : heroVideo.volume;
+            volumeSlider.value = clamp(value, 0, 1).toFixed(2);
+        }
+    };
+
+    const handleVolumeInput = (event) => {
+        const inputValue = parseFloat(event.target.value);
+        if (Number.isNaN(inputValue)) {
+            return;
+        }
+        const clampedValue = clamp(inputValue, 0, 1);
+        heroVideo.volume = clampedValue;
+        heroVideo.muted = clampedValue === 0;
+        if (clampedValue > 0) {
+            lastNonZeroVolume = clampedValue;
+        }
+        syncVolumeUI();
+    };
+
     const exitIntroState = () => {
         if (!videoWrapper || hasStarted) {
             return;
         }
         hasStarted = true;
         videoWrapper.classList.remove('intro-state');
+        videoWrapper.classList.remove('show-play-overlay');
     };
 
     const handleActivePointer = () => {
@@ -351,6 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setProgress(INITIAL_PROGRESS);
     updateButtonState();
     showControls(false);
+    syncVolumeUI();
 
     heroVideo.addEventListener('play', () => {
         exitIntroState();
@@ -358,6 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
         stopProgressAnimation();
         animateProgress();
         showControls(true);
+        setOverlayVisibility(false);
     });
 
     heroVideo.addEventListener('pause', () => {
@@ -365,6 +410,8 @@ document.addEventListener('DOMContentLoaded', function() {
         stopProgressAnimation();
         updateProgressDisplay();
         showControls(false);
+        const shouldShowOverlay = hasStarted && !heroVideo.ended;
+        setOverlayVisibility(shouldShowOverlay);
     });
 
     heroVideo.addEventListener('ended', () => {
@@ -372,6 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setProgress(1);
         updateButtonState();
         showControls(false);
+        setOverlayVisibility(true);
     });
 
     heroVideo.addEventListener('timeupdate', updateProgressDisplay);
@@ -379,6 +427,13 @@ document.addEventListener('DOMContentLoaded', function() {
         setProgress(INITIAL_PROGRESS);
         updateProgressDisplay();
         showControls(false);
+        syncVolumeUI();
+    });
+    heroVideo.addEventListener('volumechange', () => {
+        if (!heroVideo.muted && heroVideo.volume > 0) {
+            lastNonZeroVolume = heroVideo.volume;
+        }
+        syncVolumeUI();
     });
 
     heroVideo.addEventListener('click', toggleVideoPlayback);
@@ -394,6 +449,32 @@ document.addEventListener('DOMContentLoaded', function() {
         playToggle.addEventListener('click', (event) => {
             event.stopPropagation();
             toggleVideoPlayback();
+            showControls(true);
+        });
+    }
+
+    if (volumeSlider) {
+        volumeSlider.addEventListener('input', (event) => {
+            event.stopPropagation();
+            handleVolumeInput(event);
+            showControls(true);
+        });
+
+        volumeSlider.addEventListener('change', handleVolumeInput);
+    }
+
+    if (volumeToggle) {
+        volumeToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const isMuted = heroVideo.muted || heroVideo.volume === 0;
+            if (isMuted) {
+                const restoredVolume = lastNonZeroVolume > 0 ? lastNonZeroVolume : 0.75;
+                heroVideo.volume = clamp(restoredVolume, 0, 1);
+                heroVideo.muted = false;
+            } else {
+                heroVideo.muted = true;
+            }
+            syncVolumeUI();
             showControls(true);
         });
     }

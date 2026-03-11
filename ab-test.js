@@ -12,12 +12,22 @@
     var TESTS = {
         headline: {
             A: {
-                html: 'Get <span class="headline-highlight">5 Booked Calls</span> Every Month — <span class="headline-highlight">Or Don\'t Pay Us</span>',
+                html: '<span style="font-size:2rem;">Accountants</span> <br> <span class="headline-highlight" style="font-size:1.8rem">Listen up</span><br><br>We will help you sign 3 new clients every single month<br><br><span class="headline-highlight" style="font-size:2.55rem"> Or you don\'t pay</span>',
                 version: 'control'
             },
             B: {
                 // REPLACE with your variant B headline
                 html: 'Get <span class="headline-highlight">Garunteed results...</span> or you<span class="headline-highlight"> Don\'t Pay Us</span>',
+                version: 'variant_b'
+            }
+        },
+        subheadline: {
+            A: {
+                html: '',
+                version: 'control'
+            },
+            B: {
+                html: 'Only for Australian Accounting Firms',
                 version: 'variant_b'
             }
         },
@@ -40,7 +50,7 @@
     // ANTI-FLICKER — hide elements until variant is applied
     // =============================================
     var antiFlicker = document.createElement('style');
-    antiFlicker.textContent = '.headline, .hero-video video { opacity: 0 !important; }';
+    antiFlicker.textContent = '.headline, .video-intro, .hero-video video { opacity: 0 !important; }';
     document.head.appendChild(antiFlicker);
 
     // =============================================
@@ -60,6 +70,11 @@
         var headline = document.querySelector('h1.headline');
         if (headline) {
             headline.innerHTML = TESTS.headline[variant].html;
+        }
+
+        var subheadline = document.querySelector('p.video-intro');
+        if (subheadline) {
+            subheadline.innerHTML = TESTS.subheadline[variant].html;
         }
 
         var video = document.querySelector('.hero-video video');
