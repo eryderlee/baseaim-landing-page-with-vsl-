@@ -107,7 +107,7 @@ p {
 }
 
 .review-slider {
-    margin: 1.5rem auto 2.5rem;
+    margin: 3.5rem auto 3.5rem;
     width: 100%;
     max-width: 540px;
     overflow: hidden;
@@ -126,12 +126,11 @@ p {
 }
 
 .review-logo {
-    height: 44px;
+    height: 56px;
     width: auto;
     flex-shrink: 0;
     display: block;
-    opacity: 0.55;
-    filter: drop-shadow(0 4px 12px rgba(10, 46, 110, 0.08));
+    filter: drop-shadow(0 8px 24px rgba(10, 46, 110, 0.15));
 }
 
 /* Buttons */
@@ -351,8 +350,8 @@ p {
 /* SECTION 1: HERO */
 .hero {
     position: relative;
-    padding: 60px 0 80px;
-    min-height: 90vh;
+    padding: 60px 0 0;
+    min-height: unset;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -420,7 +419,7 @@ p {
 }
 
 .hero-video {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 .hero-video .video-wrapper {
@@ -1067,8 +1066,7 @@ p {
 
 .shift-panel-cta {
     margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(37, 99, 235, 0.1);
+    text-align: center;
 }
 
 .shift-panel .limited-spots-pill {
@@ -1095,12 +1093,11 @@ p {
 
 /* SECTION 2: TRUST & STORY */
 .trust-story {
-    padding: var(--section-padding);
+    padding: 0 0 5rem;
     background: linear-gradient(to bottom,
         #F8FCFF 0%,
         #FFFFFF 5%,
-        #FFFFFF 95%,
-        #F8FCFF 100%
+        #FFFFFF 100%
     );
 }
 
@@ -1119,8 +1116,8 @@ p {
     background: #FFFFFF;
     border-radius: 28px;
     padding: 2.5rem;
-    box-shadow: 0 25px 65px rgba(10, 46, 110, 0.08);
-    border: 1px solid rgba(37, 99, 235, 0.08);
+    box-shadow: 0 25px 50px rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.8);
 }
 
 .card-eyebrow {
@@ -1139,6 +1136,16 @@ p {
     box-shadow: 0 25px 50px rgba(37, 99, 235, 0.08);
     margin-bottom: 2.5rem;
     border: 1px solid rgba(37, 99, 235, 0.06);
+}
+
+.diagnosis-panel {
+    border-color: rgba(15, 118, 255, 0.4);
+    box-shadow: 0 25px 50px rgba(15, 118, 255, 0.15);
+}
+
+.shift-panel {
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 25px 50px rgba(16, 185, 129, 0.12);
 }
 
 .insight-panel h3 {
@@ -1457,10 +1464,10 @@ p {
 
 /* SECTION 3: HOW IT WORKS */
 .how-it-works {
-    padding: var(--section-padding);
+    padding: 0rem 0 var(--section-padding);
     background: linear-gradient(to bottom,
         #FFFFFF 0%,
-        #FFFFFF 92%,
+        #FFFFFF 78%,
         #eff6ff 100%
     );
 }
@@ -1468,8 +1475,8 @@ p {
 .steps {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-    margin: 2rem 0;
+    gap: 8px;
+    margin: 1rem 0;
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
@@ -1514,6 +1521,10 @@ p {
 .section-cta {
     text-align: center;
     margin-top: 3rem;
+}
+
+.how-it-works .section-cta {
+    margin-top: 1rem;
 }
 
 /* SECTION 4: GUARANTEE */
@@ -1900,7 +1911,7 @@ p {
     }
 
     .hero {
-        padding: 40px 0 calc(60px + var(--sticky-cta-height, 0px));
+        padding: 40px 0 0;
         min-height: auto;
     }
 
@@ -1946,7 +1957,7 @@ p {
     }
 
     .review-logo {
-        height: 36px;
+        height: 46px;
     }
 }
 
