@@ -54,14 +54,11 @@
     document.head.appendChild(antiFlicker);
 
     // =============================================
-    // VARIANT ASSIGNMENT — 50/50 split, persistent
+    // VARIANT ASSIGNMENT — locked to A, tracking still active
     // =============================================
-    var variant = localStorage.getItem('ab_variant');
-    if (!variant) {
-        variant = crypto.getRandomValues(new Uint32Array(1))[0] % 2 === 0 ? 'A' : 'B';
-        localStorage.setItem('ab_variant', variant);
-        localStorage.setItem('ab_variant_time', new Date().toISOString());
-    }
+    var variant = 'A';
+    localStorage.setItem('ab_variant', variant);
+    localStorage.setItem('ab_variant_time', new Date().toISOString());
 
     // =============================================
     // APPLY VARIANTS
