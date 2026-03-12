@@ -520,6 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
         stickyDismissed = true;
         videoWrapper.classList.remove('sticky');
         placeholder.style.display = 'none';
+        document.body.style.overflowX = '';
         if (videoWrapper.parentElement !== originalParent) {
             originalParent.insertBefore(videoWrapper, placeholder.nextSibling);
         }
@@ -542,6 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 videoWrapper.classList.add('sticky');
                 placeholder.style.display = 'block';
+                document.body.style.overflowX = 'hidden';
             }
         } else {
             videoWrapper.classList.remove('sticky');
@@ -549,6 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (videoWrapper.parentElement !== originalParent) {
                 originalParent.insertBefore(videoWrapper, placeholder.nextSibling);
             }
+            document.body.style.overflowX = '';
             stickyDismissed = false;
         }
     };
