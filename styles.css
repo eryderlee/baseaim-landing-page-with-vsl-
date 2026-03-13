@@ -1098,8 +1098,12 @@ p {
 
 /* SECTION 2: TRUST & STORY */
 .trust-story {
-    padding: 5rem 0 1.5rem;
-    background: #F8FCFF;
+    padding: 1.5rem 0 3.5rem;
+    background: linear-gradient(to bottom,
+        #F8FCFF 0%,
+        #F8FCFF 70%,
+        #FFFFFF 100%
+    );
 }
 
 .story-content {
@@ -1122,12 +1126,14 @@ p {
 }
 
 .card-eyebrow {
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.85rem;
-    font-weight: 800;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: var(--font-headings);
     color: var(--text-dark);
     margin-bottom: 1.5rem;
+    line-height: 1.2;
 }
 
 .insight-panel {
@@ -1504,7 +1510,8 @@ p {
 
 /* SECTION 3: HOW IT WORKS */
 .how-it-works {
-    padding: 2rem 0 5rem;
+    margin-top: clamp(32px, 5vw, 80px);
+    padding: 2.75rem 0 2rem;
     background: linear-gradient(to bottom,
         #FFFFFF 0%,
         #FFFFFF 78%,
@@ -2005,6 +2012,11 @@ p {
 
     .review-logo {
         height: 46px;
+    }
+
+    .how-it-works {
+        margin-top: 24px;
+        padding-top: 2.25rem;
     }
 }
 
