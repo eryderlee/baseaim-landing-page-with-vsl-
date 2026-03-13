@@ -1098,12 +1098,22 @@ p {
 
 /* SECTION 2: TRUST & STORY */
 .trust-story {
-    padding: 1.5rem 0 3.5rem;
+    padding: 1.5rem 0 2.6rem;
     background: linear-gradient(to bottom,
         #F8FCFF 0%,
         #F8FCFF 70%,
         #FFFFFF 100%
     );
+}
+
+.trust-story .section-eyebrow {
+    text-align: center;
+    font-size: 1.15rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dark);
+    margin-top: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 .story-content {
@@ -1531,8 +1541,8 @@ p {
 
 /* SECTION 3: HOW IT WORKS */
 .how-it-works {
-    margin-top: clamp(30px, 5vw, 80px);
-    padding: 2.75rem 0 2rem;
+    margin-top: clamp(20px, 4vw, 60px);
+    padding: 2.5rem 0 2rem;
     background: linear-gradient(to bottom,
         #FFFFFF 0%,
         #FFFFFF 78%,
