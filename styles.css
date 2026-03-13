@@ -350,7 +350,7 @@ p {
 /* SECTION 1: HERO */
 .hero {
     position: relative;
-    padding: 60px 0 0;
+    padding: 36px 0 0;
     min-height: unset;
     display: flex;
     align-items: center;
@@ -387,6 +387,9 @@ p {
     font-size: clamp(1.25rem, 2.5vw, 1.75rem);
     line-height: 1.4;
     margin-bottom: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 680px;
     color: var(--text-dark);
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -396,8 +399,7 @@ p {
     height: 35px;
     width: auto;
     display: block;
-    margin-top: -1rem;
-    margin: 0 auto 1.5rem;
+    margin: 0 auto 0.75rem;
 }
 
 /* Headline highlight - bold solid color for key phrases */
@@ -1127,7 +1129,7 @@ p {
     letter-spacing: 0.12em;
     font-size: 0.85rem;
     font-weight: 800;
-    color: var(--text-light-gray);
+    color: var(--text-dark);
     margin-bottom: 1.5rem;
 }
 
@@ -1192,11 +1194,19 @@ p {
 }
 
 .diagnosis-list li {
-    margin-bottom: 1rem;
-    padding: 1rem 1.25rem;
-    background: #F8FCFF;
-    border-radius: 14px;
-    border: 1px solid rgba(15, 118, 255, 0.1);
+    margin-bottom: 0;
+    padding: 0.85rem 0;
+    background: none;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid rgba(15, 118, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.diagnosis-list li:last-child {
+    border-bottom: none;
 }
 
 .diag-item-title {
@@ -1209,7 +1219,12 @@ p {
     display: block;
     font-size: 1rem;
     color: var(--text-medium-gray);
-    margin-top: 0.35rem;
+    margin-top: 0;
+}
+
+/* Override for shift panel — slightly tighter */
+.shift-panel .diagnosis-list li {
+    padding: 0.75rem 0;
 }
 
 .panel-tag {
@@ -1359,7 +1374,7 @@ p {
 
 .acquisition-images {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     margin: 2.5rem 0;
 }
@@ -1371,18 +1386,26 @@ p {
 }
 
 .acquisition-image-placeholder {
+    position: relative;
     width: 100%;
-    aspect-ratio: 16 / 10;
     background: #f1f5f9;
-    border: 2px dashed rgba(37, 99, 235, 0.25);
+    border: none;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 1.5rem;
+    padding: 0;
     text-align: center;
+    overflow: hidden;
+}
+
+.acquisition-image-placeholder img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
 }
 
 .acquisition-image-placeholder span {
@@ -1405,13 +1428,6 @@ p {
     font-style: italic;
 }
 
-/* When real images are dropped in, style them */
-.acquisition-image-placeholder img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 14px;
-}
 
 @media (max-width: 640px) {
     .acquisition-images {
@@ -1552,6 +1568,13 @@ p {
 
 .how-it-works .section-cta {
     margin-top: 1rem;
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid rgba(37, 99, 235, 0.15);
+    margin: 2rem auto;
+    max-width: 200px;
 }
 
 /* SECTION 4: GUARANTEE */
@@ -1938,7 +1961,7 @@ p {
     }
 
     .hero {
-        padding: 40px 0 0;
+        padding: 25px 0 0;
         min-height: auto;
     }
 
