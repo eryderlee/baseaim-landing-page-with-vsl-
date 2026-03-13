@@ -107,7 +107,7 @@ p {
 }
 
 .review-slider {
-    margin: 3.5rem auto 3.5rem;
+    margin: 3.5rem auto 0rem;
     width: 100%;
     max-width: 540px;
     overflow: hidden;
@@ -363,11 +363,12 @@ p {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 200px;
+    height: 300px;
     background: linear-gradient(to bottom,
         transparent 0%,
-        rgba(248, 252, 255, 0.3) 30%,
-        rgba(248, 252, 255, 0.7) 70%,
+        rgba(248, 252, 255, 0.2) 20%,
+        rgba(248, 252, 255, 0.6) 50%,
+        rgba(248, 252, 255, 0.9) 75%,
         #F8FCFF 100%
     );
     z-index: 5;
@@ -1097,12 +1098,8 @@ p {
 
 /* SECTION 2: TRUST & STORY */
 .trust-story {
-    padding: 0 0 5rem;
-    background: linear-gradient(to bottom,
-        #F8FCFF 0%,
-        #FFFFFF 5%,
-        #FFFFFF 100%
-    );
+    padding: 5rem 0 1.5rem;
+    background: #F8FCFF;
 }
 
 .story-content {
@@ -1507,7 +1504,7 @@ p {
 
 /* SECTION 3: HOW IT WORKS */
 .how-it-works {
-    padding: 0rem 0 var(--section-padding);
+    padding: 2rem 0 5rem;
     background: linear-gradient(to bottom,
         #FFFFFF 0%,
         #FFFFFF 78%,
