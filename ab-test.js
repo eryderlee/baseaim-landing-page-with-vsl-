@@ -12,7 +12,7 @@
     var TESTS = {
         headline: {
             A: {
-                html: '<span style="font-size:2rem;">Accountants</span> <br> <span class="headline-highlight" style="font-size:1.8rem">Listen up</span><br><br>We will help you sign 3 new clients every single month<br><br><span class="headline-highlight" style="font-size:2.55rem"> Or you don\'t pay</span>',
+                html: '<span style="font-size:2rem;">Accountants</span> <br> <span class="headline-highlight" style="font-size:1.8rem">Listen up</span><br><br>We will help you sign 3 new clients every single month<br><br><span class="headline-highlight" style="font-size:2.55rem"> Or you Don\'t Pay</span>',
                 version: 'control'
             },
             B: {
