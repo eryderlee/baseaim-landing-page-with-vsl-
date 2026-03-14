@@ -1495,7 +1495,7 @@ p {
 }
 
 .proof {
-    padding: var(--section-padding);
+    padding: 0rem 0 5rem;
     background: var(--bg-white);
 }
 
