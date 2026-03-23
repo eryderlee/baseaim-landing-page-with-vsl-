@@ -485,6 +485,22 @@ document.addEventListener('DOMContentLoaded', function() {
             toggleVideoPlayback();
         });
     }
+
+    const fullscreenToggle = customControls.querySelector('.video-fullscreen-toggle');
+    if (fullscreenToggle) {
+        fullscreenToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const wrapper = heroVideo.closest('.video-wrapper');
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else if (wrapper && wrapper.requestFullscreen) {
+                wrapper.requestFullscreen();
+            } else if (heroVideo.webkitEnterFullscreen) {
+                heroVideo.webkitEnterFullscreen();
+            }
+            showControls(true);
+        });
+    }
 });
 
 // Sticky video functionality - minimizes to corner when scrolled past

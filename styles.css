@@ -837,6 +837,30 @@ p {
     height: 4px;
 }
 
+.video-fullscreen-toggle {
+    pointer-events: auto;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    padding: 0.3rem;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.video-fullscreen-toggle:hover {
+    color: #fff;
+    transform: scale(1.15);
+}
+
+.video-wrapper.sticky .video-fullscreen-toggle {
+    display: none;
+}
+
 .video-wrapper.hide-controls .custom-video-ui {
     opacity: 0;
 }
