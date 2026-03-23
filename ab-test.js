@@ -33,7 +33,7 @@
         },
         vsl: {
             A: {
-                src: 'Final VSL (1).mov',
+                src: 'final-vsl.mp4',
                 poster: 'thumbnail 2.png',
                 version: 'control'
             },

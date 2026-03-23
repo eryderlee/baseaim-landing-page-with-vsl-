@@ -383,7 +383,11 @@ p {
     --headline-gap-bottom: -40px;   /* gap: blue headline → subtext */
     --headline-listen-gap: 1px;      /* gap: "Accountants" → "Listen up" */
     --headline-to-video-gap: 3.5rem; /* gap: "Or you Don't Pay" → video below */
-    --headline-mid-gap: 1em;       /* gap: "every single month" → "Or you Don't Pay" */
+    --headline-mid-gap: 1em;         /* gap: "every single month" → "Or you Don't Pay" */
+    --video-intro-gap-top: 0rem;      /* gap above "Watch this video" text */
+    --video-intro-gap-bottom: 1rem;   /* gap below "Watch this video" text */
+    --watch-label-gap-top: 0rem;      /* gap above "Watch this video" label */
+    --watch-label-gap-bottom: 0.6rem; /* gap below "Watch this video" label */
 }
 .headline-br-mid { height: var(--headline-mid-gap); }
 .headline-br-top,
@@ -433,7 +437,8 @@ p {
 .video-intro {
     font-size: 1.25rem;
     color: var(--text-medium-gray);
-    margin-bottom: 2.5rem;
+    margin-top: var(--video-intro-gap-top);
+    margin-bottom: var(--video-intro-gap-bottom);
     line-height: 1.5;
 }
 
@@ -442,8 +447,8 @@ p {
     font-weight: 600;
     color: #444;
     text-align: center;
-    margin-bottom: 0.6rem;
-    margin-top: 0;
+    margin-top: var(--watch-label-gap-top);
+    margin-bottom: var(--watch-label-gap-bottom);
     letter-spacing: 0.02em;
     display: flex;
     align-items: center;
@@ -472,11 +477,6 @@ p {
     padding: 0.6rem 0.75rem 0.75rem;
 }
 
-/* Gradient border on video using outline — no extra element, no click interference */
-.hero-video .video-wrapper {
-    outline: 3px solid #2865c2;
-    outline-offset: 0;
-}
 
 @keyframes gradient-border-spin {
     0%   { background-position: 0% 50%; }
@@ -517,6 +517,7 @@ p {
     overflow: hidden;
     border-radius: 16px;
     box-shadow: none;
+    outline: 3px solid #2865c2;
 }
 
 .hero-video .video-wrapper iframe,
@@ -533,7 +534,7 @@ p {
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 1.25rem 1.5rem 1.75rem;
+    padding: 1.25rem 1.5rem 0.5rem;
     background: linear-gradient(180deg, rgba(3, 7, 18, 0) 0%, rgba(3, 7, 18, 0.8) 70%);
     display: flex;
     align-items: center;
