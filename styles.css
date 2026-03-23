@@ -383,7 +383,9 @@ p {
     --headline-gap-bottom: -40px;   /* gap: blue headline → subtext */
     --headline-listen-gap: 1px;      /* gap: "Accountants" → "Listen up" */
     --headline-to-video-gap: 3.5rem; /* gap: "Or you Don't Pay" → video below */
+    --headline-mid-gap: 1em;       /* gap: "every single month" → "Or you Don't Pay" */
 }
+.headline-br-mid { height: var(--headline-mid-gap); }
 .headline-br-top,
 .headline-br-bottom { display: none; }
 .headline .headline-highlight {
@@ -470,13 +472,10 @@ p {
     padding: 0.6rem 0.75rem 0.75rem;
 }
 
-/* Animated gradient border around just the video */
-.video-gradient-border {
-    padding: 1.5px;
-    border-radius: 20px;
-    background: linear-gradient(90deg, #437fd8, #2865c2, #4875ce, #5582c7);
-    background-size: 300% 100%;
-    animation: gradient-border-spin 3s linear infinite;
+/* Gradient border on video using outline — no extra element, no click interference */
+.hero-video .video-wrapper {
+    outline: 3px solid #2865c2;
+    outline-offset: 0;
 }
 
 @keyframes gradient-border-spin {
