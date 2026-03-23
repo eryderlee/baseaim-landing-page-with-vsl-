@@ -1,3 +1,25 @@
+// Render star ratings as inline SVGs with partial fill
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.star-rating[data-rating]').forEach(function(el) {
+        var rating = parseFloat(el.dataset.rating) || 0;
+        var size = 20;
+        var gap = 3;
+        var svgWidth = size * 5 + gap * 4;
+        var stars = '';
+        for (var i = 0; i < 5; i++) {
+            var fill = Math.min(Math.max(rating - i, 0), 1);
+            var id = 'star-' + Math.random().toString(36).substr(2, 6);
+            var x = i * (size + gap);
+            stars += '<defs><linearGradient id="' + id + '">' +
+                '<stop offset="' + (fill * 100) + '%" stop-color="#f59e0b"/>' +
+                '<stop offset="' + (fill * 100) + '%" stop-color="#e2e8f0"/>' +
+                '</linearGradient></defs>' +
+                '<path transform="translate(' + x + ',0)" d="M10 1.5l2.47 5.01 5.53.8-4 3.9.94 5.49L10 14.27 5.06 16.7 6 11.21 2 7.31l5.53-.8z" fill="url(#' + id + ')"/>';
+        }
+        el.innerHTML = '<svg width="' + svgWidth + '" height="' + size + '" viewBox="0 0 ' + svgWidth + ' ' + size + '" style="display:block">' + stars + '</svg>';
+    });
+});
+
 // Smooth scroll to booking section
 function scrollToBooking() {
     const bookingSection = document.getElementById('booking');

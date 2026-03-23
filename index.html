@@ -48,6 +48,80 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- Secret confetti button -->
+    <!-- confetti-btn removed, logo triggers confetti instead -->
+    <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;"></canvas>
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        var btn = document.querySelector('.hero-logo');
+        var canvas = document.getElementById('confetti-canvas');
+        if (!btn || !canvas) return;
+        var ctx = canvas.getContext('2d');
+        var pieces = [], running = false;
+        var colors = ['#2563eb','#10B981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4'];
+        function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+        btn.style.cursor = 'pointer';
+        function Piece(){
+            this.x = Math.random() * canvas.width;
+            this.y = -10 - Math.random() * canvas.height * 0.5;
+            this.w = 4 + Math.random() * 6;
+            this.h = 3 + Math.random() * 4;
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.vy = 2 + Math.random() * 3;
+            this.vx = -1.5 + Math.random() * 3;
+            this.rot = Math.random() * 360;
+            this.rv = -3 + Math.random() * 6;
+        }
+        function draw(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var alive = false;
+            for(var i = 0; i < pieces.length; i++){
+                var p = pieces[i];
+                p.x += p.vx; p.y += p.vy; p.rot += p.rv; p.vy += 0.04;
+                if(p.y < canvas.height + 20){ alive = true; }
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+                ctx.restore();
+            }
+            if(alive){ requestAnimationFrame(draw); } else { running = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        }
+        btn.addEventListener('click', function(){
+            pieces = [];
+            for(var i = 0; i < 200; i++) pieces.push(new Piece());
+            if(!running){ running = true; draw(); }
+        });
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        document.body.addEventListener('click', function(e){
+            if (e.target.id !== 'secret-p' && (!e.target.closest || !e.target.closest('#secret-p'))) return;
+            var body = document.body;
+            body.style.transition = 'filter 0.3s ease, transform 0.3s ease';
+            body.style.filter = 'hue-rotate(180deg) invert(1)';
+            body.style.transform = 'rotate(1deg) scale(1.02)';
+            setTimeout(function(){
+                body.style.filter = 'blur(3px) saturate(3)';
+                body.style.transform = 'rotate(-1deg) scale(0.98)';
+            }, 800);
+            setTimeout(function(){
+                body.style.filter = 'hue-rotate(90deg)';
+                body.style.transform = 'skewX(2deg)';
+            }, 1600);
+            setTimeout(function(){
+                body.style.transition = 'filter 0.5s ease, transform 0.5s ease';
+                body.style.filter = '';
+                body.style.transform = '';
+            }, 2400);
+        });
+    });
+    </script>
+
     <!-- SECTION 1: HERO -->
     <section class="hero" id="hero">
         <!-- Animated Gradient Background -->
@@ -308,35 +382,38 @@
                     <div class="testimonial">
                         <div class="testimonial-profile-row">
                             <div class="testimonial-profile">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iI2U0ZTdlYyIvPjxwYXRoIGQ9Ik00MCA0NGM5IDAgMTYtNyAxNi0xNlM0OSAxMiA0MCAxMnMtMTYgNy0xNiAxNiA3IDE2IDE2IDE2Wm0wIDhjLTExLjA1IDAtMjAgNi4yNy0yMCAxNHY2aDQwdi02YzAtNy43My04Ljk1LTE0LTIwLTE0WiIgZmlsbD0iIzlhYTBhNiIvPjwvc3ZnPg==" alt="Placeholder profile silhouette">
+                                <img src="micheal r.png" alt="Michael R headshot">
                             </div>
                             <p class="testimonial-author">&ndash; Michael R, Partner</p>
                         </div>
                         <p class="testimonial-title"><strong>Predictable Consultations</strong></p>
-                        <span class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                        <span class="testimonial-score"><span class="star-rating" data-rating="4.7"></span><span>4.7</span></span>
                         <p class="testimonial-text">&ldquo;For years our new clients mostly came from referrals. Some months we&rsquo;d get a few enquiries, other months nothing. After working with the team, we started getting <strong>consistent consultations</strong> booked each month and it completely changed how we think about growth.&rdquo;</p>
+                        <p class="testimonial-date">March 2026</p>
                     </div>
                     <div class="testimonial">
                         <div class="testimonial-profile-row">
                             <div class="testimonial-profile">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iI2U0ZTdlYyIvPjxwYXRoIGQ9Ik00MCA0NGM5IDAgMTYtNyAxNi0xNlM0OSAxMiA0MCAxMnMtMTYgNy0xNiAxNiA3IDE2IDE2IDE2Wm0wIDhjLTExLjA1IDAtMjAgNi4yNy0yMCAxNHY2aDQwdi02YzAtNy43My04Ljk1LTE0LTIwLTE0WiIgZmlsbD0iIzlhYTBhNiIvPjwvc3ZnPg==" alt="Placeholder profile silhouette">
+                                <img src="sarah M.png" alt="Sarah M headshot">
                             </div>
                             <p class="testimonial-author">&ndash; Sarah M, Firm Manager</p>
                         </div>
-                        <p class="testimonial-title"><strong>Transparent Growth Engine</strong></p>
-                        <span class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                        <p class="testimonial-title"><strong>Clarity-First Growth Plan</strong></p>
+                        <span class="testimonial-score"><span class="star-rating" data-rating="4.9"></span><span>4.9</span></span>
                         <p class="testimonial-text">&ldquo;They booked 39 consultations for us over about 6 months and we ended up onboarding <strong>21 new clients</strong>. What impressed me most was how transparent they were with marketing strategies.&rdquo;</p>
+                        <p class="testimonial-date">February 2026</p>
                     </div>
                     <div class="testimonial">
                         <div class="testimonial-profile-row">
                             <div class="testimonial-profile">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iI2U0ZTdlYyIvPjxwYXRoIGQ9Ik00MCA0NGM5IDAgMTYtNyAxNi0xNlM0OSAxMiA0MCAxMnMtMTYgNy0xNiAxNiA3IDE2IDE2IDE2Wm0wIDhjLTExLjA1IDAtMjAgNi4yNy0yMCAxNHY2aDQwdi02YzAtNy43My04Ljk1LTE0LTIwLTE0WiIgZmlsbD0iIzlhYTBhNiIvPjwvc3ZnPg==" alt="Placeholder profile silhouette">
+                                <img src="tommy s.png" alt="Tommy S headshot">
                             </div>
                             <p class="testimonial-author">&ndash; Tommy S, Senior Accountant</p>
                         </div>
                         <p class="testimonial-title"><strong>Reliable Pipeline System</strong></p>
-                        <span class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                        <span class="testimonial-score"><span class="star-rating" data-rating="4.3"></span><span>4.3</span></span>
                         <p class="testimonial-text">&ldquo;Before this we had no real system for bringing in new business. Everything depended on referrals or the occasional enquiry through the website. Now we have a <strong>steady pipeline</strong> of consultations and we can actually plan hiring and growth properly.&rdquo;</p>
+                        <p class="testimonial-date">January 2026</p>
                     </div>
                 </div>
             </div>
