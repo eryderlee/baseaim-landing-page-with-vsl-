@@ -377,11 +377,30 @@ p {
     text-align: center;
 }
 
+/* Headline gap spacers — adjust variables below to control spacing */
+:root {
+    --headline-gap-top: -10px;      /* gap: "Listen up" → blue headline */
+    --headline-gap-bottom: -40px;   /* gap: blue headline → subtext */
+    --headline-listen-gap: 1px;      /* gap: "Accountants" → "Listen up" */
+    --headline-to-video-gap: 3.5rem; /* gap: "Or you Don't Pay" → video below */
+}
+.headline-br-top,
+.headline-br-bottom { display: none; }
+.headline .headline-highlight {
+    display: block;
+    margin-top: var(--headline-gap-top);
+    margin-bottom: var(--headline-gap-bottom);
+}
+.listen-up-highlight {
+    display: block;
+    margin-top: var(--headline-listen-gap);
+}
+
 .headline {
     font-family: var(--font-headings);
     font-size: clamp(1.25rem, 2.5vw, 1.75rem);
     line-height: 1.4;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--headline-to-video-gap);
     margin-left: auto;
     margin-right: auto;
     max-width: 680px;
@@ -391,10 +410,10 @@ p {
 }
 
 .hero-logo {
-    height: 35px;
+    height: 30px;
     width: auto;
     display: block;
-    margin: 0 auto 0.75rem;
+    margin: 0 auto 0.35rem;
 }
 
 /* Headline highlight - bold solid color for key phrases */
@@ -416,8 +435,54 @@ p {
     line-height: 1.5;
 }
 
+.watch-video-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #444;
+    text-align: center;
+    margin-bottom: 0.6rem;
+    margin-top: 0;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.watch-video-sound-icon {
+    flex-shrink: 0;
+    display: block;
+    color: #0065ff;
+}
+
 .hero-video {
     margin-bottom: 1rem;
+}
+
+/* Plain grey frame around the whole label + video area */
+.video-frame {
+    border: 1px solid #4282e2;
+    border-radius: 20px;
+    background: #ffffff;
+}
+
+.video-frame-inner {
+    padding: 0.6rem 0.75rem 0.75rem;
+}
+
+/* Animated gradient border around just the video */
+.video-gradient-border {
+    padding: 1.5px;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #437fd8, #2865c2, #4875ce, #5582c7);
+    background-size: 300% 100%;
+    animation: gradient-border-spin 3s linear infinite;
+}
+
+@keyframes gradient-border-spin {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .scroll-arrow {
@@ -452,7 +517,7 @@ p {
     height: 0;
     overflow: hidden;
     border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    box-shadow: none;
 }
 
 .hero-video .video-wrapper iframe,
@@ -1399,11 +1464,42 @@ p {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
 }
 
 .testimonial:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
+}
+
+.testimonial-profile-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.testimonial-profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(37, 99, 235, 0.15);
+    flex-shrink: 0;
+}
+
+.testimonial-profile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.testimonial-title {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin: 0;
 }
 
 .testimonial-stars {
@@ -1426,6 +1522,7 @@ p {
     font-size: 0.95rem;
     color: var(--text-light-gray);
     font-weight: 600;
+    margin: 0;
 }
 
 .acquisition-images {
@@ -1444,6 +1541,7 @@ p {
 .acquisition-image-placeholder {
     position: relative;
     width: 100%;
+    aspect-ratio: 16 / 9;
     background: #f1f5f9;
     border: none;
     border-radius: 16px;
@@ -1460,9 +1558,16 @@ p {
 .acquisition-image-placeholder img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     border-radius: 16px;
 }
+
+.acquisition-image-item:nth-child(2) .acquisition-image-placeholder img,
+.acquisition-image-item:nth-child(3) .acquisition-image-placeholder img {
+    object-position: left center;
+}
+
 
 .acquisition-image-placeholder span {
     font-weight: 700;
