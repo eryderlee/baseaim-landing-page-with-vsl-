@@ -546,13 +546,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.style.overflowX = 'hidden';
             }
         } else {
-            videoWrapper.classList.remove('sticky');
-            placeholder.style.display = 'none';
-            if (videoWrapper.parentElement !== originalParent) {
-                originalParent.insertBefore(videoWrapper, placeholder.nextSibling);
+            if (videoWrapper.classList.contains('sticky')) {
+                videoWrapper.classList.remove('sticky');
+                placeholder.style.display = 'none';
+                if (videoWrapper.parentElement !== originalParent) {
+                    originalParent.insertBefore(videoWrapper, placeholder.nextSibling);
+                }
+                document.body.style.overflowX = '';
+                stickyDismissed = false;
             }
-            document.body.style.overflowX = '';
-            stickyDismissed = false;
         }
     };
 

@@ -12,7 +12,7 @@
     var TESTS = {
         headline: {
             A: {
-                html: '<span style="font-size:2rem;">Accountants</span> <br> <span class="headline-highlight" style="font-size:1.8rem">Listen up</span><br><br>We will help you sign 3 new clients every single month<br><br><span class="headline-highlight" style="font-size:2.55rem"> Or you Don\'t Pay</span>',
+                html: '<span style="font-size:2rem;">Accountants</span> <br> <span class="headline-highlight" style="font-size:1.9rem">Listen up</span><br><br>We will help you sign an extra <br><strong>THREE</strong> new clients <br> every single month<br><br><span class="headline-highlight" style="font-size:2.55rem"> Or you Don\'t Pay</span>',
                 version: 'control'
             },
             B: {
@@ -33,14 +33,14 @@
         },
         vsl: {
             A: {
-                src: 'vsl mp4.mp4',
-                poster: 'hero-poster.jpeg',
+                src: 'Final VSL (1).mov',
+                poster: 'thumbnail 2.png',
                 version: 'control'
             },
             B: {
                 // REPLACE with your variant B video file and poster
                 src: 'vsl mp4.mp4',
-                poster: 'hero-poster.jpeg',
+                poster: 'thumbnail 2.png',
                 version: 'variant_b'
             }
         }
