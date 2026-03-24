@@ -237,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPlayAttemptPending = false;
     const CONTROLS_HIDE_DELAY = 15000;
     let lastNonZeroVolume = heroVideo.volume > 0 ? heroVideo.volume : 0.75;
+    let lastPlayToggleTime = 0;
 
     const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 
@@ -368,6 +369,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const toggleVideoPlayback = () => {
+        const now = Date.now();
+        if (now - lastPlayToggleTime < 300) return;
+        lastPlayToggleTime = now;
+
         if (heroVideo.paused || heroVideo.ended) {
             isPlayAttemptPending = true;
             exitIntroState();
@@ -510,7 +515,11 @@ document.addEventListener('DOMContentLoaded', function() {
         syncVolumeUI();
     });
 
-    heroVideo.addEventListener('click', toggleVideoPlayback);
+    videoWrapper.addEventListener('click', (event) => {
+        if (event.target === heroVideo || event.target === videoWrapper) {
+            toggleVideoPlayback();
+        }
+    });
     heroVideo.addEventListener('keydown', (event) => {
         if (event.code === 'Space' || event.code === 'Enter') {
             event.preventDefault();
