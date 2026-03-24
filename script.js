@@ -368,7 +368,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const toggleVideoPlayback = () => {
         if (heroVideo.paused || heroVideo.ended) {
-            heroVideo.play();
+            const playPromise = heroVideo.play();
+            if (playPromise && playPromise.catch) {
+                playPromise.catch(() => {
+                    // Mobile may block autoplay; try muted first then unmute
+                    heroVideo.muted = true;
+                    heroVideo.play().then(() => {
+                        syncVolumeUI();
+                    }).catch(() => {});
+                });
+            }
         } else {
             heroVideo.pause();
         }

@@ -377,6 +377,47 @@ p {
     text-align: center;
 }
 
+/* Desktop CTA hidden on mobile, mobile CTA hidden on desktop */
+.hero-cta-desktop {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .hero-content-centered {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        align-items: center;
+        max-width: 1200px;
+        text-align: left;
+    }
+
+    .hero-text-col {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-content-centered .headline {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: none;
+    }
+
+    .hero-content-centered .scroll-arrow {
+        grid-column: 1 / -1;
+    }
+
+    .hero-cta-desktop {
+        display: block;
+    }
+
+    .hero-cta-mobile {
+        display: none;
+    }
+}
+
 /* Headline gap spacers — adjust variables below to control spacing */
 :root {
     --headline-gap-top: -10px;      /* gap: "Listen up" → blue headline */
@@ -1337,12 +1378,8 @@ p {
 
 @media (min-width: 992px) {
     .frustration-layout {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         align-items: start;
-    }
-
-    .frustration-layout .shift-panel {
-        grid-column: 1 / -1;
     }
 }
 
