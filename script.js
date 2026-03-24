@@ -369,10 +369,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const toggleVideoPlayback = () => {
         if (heroVideo.paused || heroVideo.ended) {
-            exitIntroState();
-            setOverlayVisibility(false);
+            // Call play() FIRST — iOS requires play() to be synchronous
+            // in the user gesture call stack, before any DOM updates
             isPlayAttemptPending = true;
             const playPromise = heroVideo.play();
+            exitIntroState();
+            setOverlayVisibility(false);
             if (playPromise !== undefined) {
                 playPromise.then(() => {
                     isPlayAttemptPending = false;
