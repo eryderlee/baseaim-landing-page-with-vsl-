@@ -369,24 +369,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const toggleVideoPlayback = () => {
         if (heroVideo.paused || heroVideo.ended) {
-            // Call play() FIRST — iOS requires play() to be synchronous
-            // in the user gesture call stack, before any DOM updates
             isPlayAttemptPending = true;
-            const playPromise = heroVideo.play();
             exitIntroState();
             setOverlayVisibility(false);
+            const playPromise = heroVideo.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
-                    isPlayAttemptPending = false;
+                    // Keep pending briefly — iOS can pause right after play resolves
+                    setTimeout(() => { isPlayAttemptPending = false; }, 500);
                 }).catch(() => {
                     // Mobile may block unmuted playback; retry muted
                     heroVideo.muted = true;
                     heroVideo.play().then(() => {
-                        isPlayAttemptPending = false;
+                        setTimeout(() => { isPlayAttemptPending = false; }, 500);
                         syncVolumeUI();
                     }).catch(() => {
                         isPlayAttemptPending = false;
-                        // Both attempts failed — revert UI
                         setOverlayVisibility(true);
                     });
                 });
@@ -467,14 +465,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     heroVideo.addEventListener('pause', () => {
+        if (isPlayAttemptPending) {
+            // iOS can fire pause during buffering after play() — ignore it
+            return;
+        }
         updateButtonState();
         stopProgressAnimation();
         updateProgressDisplay();
         showControls(false);
-        if (!isPlayAttemptPending) {
-            const shouldShowOverlay = hasStarted && !heroVideo.ended;
-            setOverlayVisibility(shouldShowOverlay);
-        }
+        const shouldShowOverlay = hasStarted && !heroVideo.ended;
+        setOverlayVisibility(shouldShowOverlay);
     });
 
     heroVideo.addEventListener('ended', () => {
@@ -489,6 +489,12 @@ document.addEventListener('DOMContentLoaded', function() {
     heroVideo.addEventListener('waiting', () => {
         if (isPlayAttemptPending) {
             showControls(true);
+            setOverlayVisibility(false);
+        }
+    });
+    heroVideo.addEventListener('canplay', () => {
+        if (isPlayAttemptPending && heroVideo.paused) {
+            heroVideo.play().catch(() => {});
         }
     });
     heroVideo.addEventListener('loadedmetadata', () => {
