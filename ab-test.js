@@ -188,9 +188,10 @@
         // --- Section visibility tracking ---
         var sections = [
             { id: 'hero', name: 'Hero' },
-            { id: 'trust', name: 'Trust & Story' },
+            { id: 'frustration', name: 'Trust & Story' },
             { id: 'how-it-works', name: 'How It Works' },
-            { id: 'guarantee', name: 'Guarantee' },
+            { id: 'solution', name: 'Guarantee' },
+            { id: 'proof', name: 'Proof' },
             { id: 'faq', name: 'FAQ' },
             { id: 'booking', name: 'Booking' }
         ];
