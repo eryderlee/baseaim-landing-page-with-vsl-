@@ -77,9 +77,12 @@
         var video = document.querySelector('.hero-video video');
         var source = video ? video.querySelector('source') : null;
         if (video && source) {
-            source.src = TESTS.vsl[variant].src;
+            var newSrc = new URL(TESTS.vsl[variant].src, document.baseURI).href;
+            if (source.src !== newSrc) {
+                source.src = TESTS.vsl[variant].src;
+                video.load();
+            }
             video.poster = TESTS.vsl[variant].poster;
-            video.load();
         }
 
         // Remove anti-flicker

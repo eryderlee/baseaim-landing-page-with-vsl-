@@ -486,6 +486,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     heroVideo.addEventListener('timeupdate', updateProgressDisplay);
+    heroVideo.addEventListener('waiting', () => {
+        if (isPlayAttemptPending) {
+            showControls(true);
+        }
+    });
     heroVideo.addEventListener('loadedmetadata', () => {
         setProgress(INITIAL_PROGRESS);
         updateProgressDisplay();
