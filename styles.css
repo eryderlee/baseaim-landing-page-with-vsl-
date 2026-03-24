@@ -572,6 +572,7 @@ p {
     box-shadow: none;
     outline: var(--video-outline-width) solid var(--video-outline-color);
     outline-offset: var(--video-outline-offset);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .hero-video .video-wrapper iframe,
@@ -934,6 +935,7 @@ p {
     transition: opacity 0.35s ease, visibility 0.35s ease;
     pointer-events: none;
     z-index: 1;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .video-centered-play {
@@ -957,6 +959,7 @@ p {
     z-index: 2;
     color: transparent;
     box-shadow: 0 10px 35px rgba(37, 99, 235, 0.4);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .video-centered-play::before,

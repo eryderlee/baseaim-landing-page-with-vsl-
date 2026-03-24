@@ -368,10 +368,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const toggleVideoPlayback = () => {
         if (heroVideo.paused || heroVideo.ended) {
+            exitIntroState();
+            setOverlayVisibility(false);
             const playPromise = heroVideo.play();
             if (playPromise && playPromise.catch) {
                 playPromise.catch(() => {
-                    // Mobile may block autoplay; try muted first then unmute
+                    // Mobile may block unmuted autoplay; retry muted
                     heroVideo.muted = true;
                     heroVideo.play().then(() => {
                         syncVolumeUI();
@@ -529,15 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const handleOverlayPlay = (event) => {
         event.stopPropagation();
-        // On mobile, ensure video is ready before playing
-        if (heroVideo.readyState < 2) {
-            heroVideo.load();
-            heroVideo.addEventListener('canplay', () => {
-                toggleVideoPlayback();
-            }, { once: true });
-        } else {
-            toggleVideoPlayback();
-        }
+        toggleVideoPlayback();
     };
 
     if (overlayPlayButton) {
