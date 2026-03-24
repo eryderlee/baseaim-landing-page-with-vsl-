@@ -508,6 +508,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    const overlayDiv = videoWrapper ? videoWrapper.querySelector('.video-overlay-play') : null;
+    if (overlayDiv) {
+        overlayDiv.addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleVideoPlayback();
+        });
+    }
+
     const fullscreenToggle = customControls.querySelector('.video-fullscreen-toggle');
     if (fullscreenToggle) {
         fullscreenToggle.addEventListener('click', (event) => {

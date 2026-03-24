@@ -466,15 +466,27 @@ p {
     margin-bottom: 1rem;
 }
 
+/* ── Video frame variables ── */
+:root {
+    --video-border-width: 1px;        /* border thickness */
+    --video-border-color: #4282e2;    /* border color */
+    --video-border-radius: 20px;      /* outer rounding */
+    --video-inner-radius: 17px;       /* inner video rounding */
+    --video-frame-padding: 0.6rem 0.75rem 0.75rem; /* space between border and video */
+    --video-outline-width: 4px;       /* inner outline thickness */
+    --video-outline-color: #2865c2;   /* inner outline color */
+    --video-outline-offset: -1px;     /* negative = tighter to video, 0 = small gap */
+}
+
 /* Plain grey frame around the whole label + video area */
 .video-frame {
-    border: 1px solid #4282e2;
-    border-radius: 20px;
+    border: var(--video-border-width) solid var(--video-border-color);
+    border-radius: var(--video-border-radius);
     background: #ffffff;
 }
 
 .video-frame-inner {
-    padding: 0.6rem 0.75rem 0.75rem;
+    padding: var(--video-frame-padding);
 }
 
 
@@ -515,9 +527,10 @@ p {
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: var(--video-inner-radius);
     box-shadow: none;
-    outline: 3px solid #2865c2;
+    outline: var(--video-outline-width) solid var(--video-outline-color);
+    outline-offset: var(--video-outline-offset);
 }
 
 .hero-video .video-wrapper iframe,
@@ -953,6 +966,7 @@ p {
 .video-wrapper.show-play-overlay .video-overlay-play {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
 }
 
 .video-wrapper.intro-state .video-centered-play,
