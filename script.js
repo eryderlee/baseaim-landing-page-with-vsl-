@@ -266,11 +266,29 @@ document.addEventListener('DOMContentLoaded', function() {
             return 1;
         }
 
-        // Smooth near-linear progress from INITIAL_PROGRESS to 1
+        // Two-phase slider:
+        const halfTime = barEndTime * 0.05;  // first half fills in 15% of total time (CHANGE THIS to speed up/slow down first half)
         const ratio = safeTime / barEndTime;
-        // Slight ease-out so it doesn't feel robotic, but much less slowdown than before
-        const eased = 1 - Math.pow(1 - ratio, 2);
-        return INITIAL_PROGRESS + eased * (1 - INITIAL_PROGRESS);
+
+        if (safeTime <= halfTime) {
+            // First half: fast — reaches 50% by halfTime
+            return (safeTime / halfTime) * 0.5;
+        } else {
+            // Three sub-phases after the fast start:
+            const remaining = barEndTime - halfTime;
+            const elapsed = safeTime - halfTime;
+            const secondRatio = elapsed / remaining;
+
+            // 50% → 95%: steady moderate speed
+            const crawlStart = 0.3; // ratio at which crawl begins (30% of remaining time)
+            if (secondRatio <= crawlStart) {
+                return 0.5 + (secondRatio / crawlStart) * 0.45; // 50% to 95%
+            } else {
+                // 95% → 100%: crawl to finish
+                const crawlRatio = (secondRatio - crawlStart) / (1 - crawlStart);
+                return 0.95 + crawlRatio * 0.05;
+            }
+        }
     };
 
     const updateButtonState = () => {
