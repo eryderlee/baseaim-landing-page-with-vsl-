@@ -20,11 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Smooth scroll to booking section
+// Smooth scroll to cal.com embed
 function scrollToBooking() {
-    const bookingSection = document.getElementById('booking');
-    if (bookingSection) {
-        bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const calEmbed = document.querySelector('.cal-embed');
+    if (calEmbed) {
+        calEmbed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        const bookingSection = document.getElementById('booking');
+        if (bookingSection) {
+            bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 }
 
@@ -217,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    const INITIAL_PROGRESS = 0.25;
+    const INITIAL_PROGRESS = 0;
     const videoWrapper = heroVideo.closest('.video-wrapper');
     const playToggle = customControls.querySelector('.video-play-toggle');
     const volumeControl = customControls.querySelector('.video-volume');
@@ -250,32 +255,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const safeTime = clamp(currentTime, 0, duration);
-        const fastPhaseEnd = Math.min(5, duration * 0.3);
-        const milestoneTime = Math.min(50, duration * 0.9);
-        const midPhaseDuration = Math.max(milestoneTime - fastPhaseEnd, 0.1);
-        const tailDuration = Math.max(duration - milestoneTime, duration * 0.1, 0.1);
+        // Bar finishes 20s before video ends
+        const barEndTime = Math.max(duration - 20, duration * 0.8);
 
         if (safeTime <= 0) {
             return INITIAL_PROGRESS;
         }
 
-        if (safeTime <= fastPhaseEnd) {
-            const ratio = fastPhaseEnd > 0 ? safeTime / fastPhaseEnd : 1;
-            return INITIAL_PROGRESS + ratio * 0.25; // up to ~50%
+        if (safeTime >= barEndTime) {
+            return 1;
         }
 
-        if (safeTime <= milestoneTime) {
-            const ratio = Math.min((safeTime - fastPhaseEnd) / midPhaseDuration, 1);
-            return 0.5 + ratio * 0.3; // climb to ~80% by milestone
-        }
-
-        if (safeTime < duration) {
-            const ratio = clamp((safeTime - milestoneTime) / tailDuration);
-            const eased = 1 - Math.pow(1 - ratio, 2);
-            return 0.8 + eased * 0.2;
-        }
-
-        return 1;
+        // Smooth near-linear progress from INITIAL_PROGRESS to 1
+        const ratio = safeTime / barEndTime;
+        // Slight ease-out so it doesn't feel robotic, but much less slowdown than before
+        const eased = 1 - Math.pow(1 - ratio, 2);
+        return INITIAL_PROGRESS + eased * (1 - INITIAL_PROGRESS);
     };
 
     const updateButtonState = () => {
