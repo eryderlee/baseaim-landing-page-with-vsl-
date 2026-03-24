@@ -441,12 +441,16 @@ document.addEventListener('DOMContentLoaded', function() {
     syncVolumeUI();
 
     heroVideo.addEventListener('play', () => {
-        exitIntroState();
         updateButtonState();
         stopProgressAnimation();
         animateProgress();
         showControls(true);
         setOverlayVisibility(false);
+    });
+
+    // Only exit intro state when video is truly playing (not just a blocked play event)
+    heroVideo.addEventListener('playing', () => {
+        exitIntroState();
     });
 
     heroVideo.addEventListener('pause', () => {
@@ -523,19 +527,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    if (overlayPlayButton) {
-        overlayPlayButton.addEventListener('click', (event) => {
-            event.stopPropagation();
+    const handleOverlayPlay = (event) => {
+        event.stopPropagation();
+        // On mobile, ensure video is ready before playing
+        if (heroVideo.readyState < 2) {
+            heroVideo.load();
+            heroVideo.addEventListener('canplay', () => {
+                toggleVideoPlayback();
+            }, { once: true });
+        } else {
             toggleVideoPlayback();
-        });
+        }
+    };
+
+    if (overlayPlayButton) {
+        overlayPlayButton.addEventListener('click', handleOverlayPlay);
     }
 
     const overlayDiv = videoWrapper ? videoWrapper.querySelector('.video-overlay-play') : null;
     if (overlayDiv) {
-        overlayDiv.addEventListener('click', (event) => {
-            event.stopPropagation();
-            toggleVideoPlayback();
-        });
+        overlayDiv.addEventListener('click', handleOverlayPlay);
     }
 
     const fullscreenToggle = customControls.querySelector('.video-fullscreen-toggle');
