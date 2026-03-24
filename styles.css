@@ -1632,7 +1632,7 @@ p {
 
 .acquisition-images {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     margin: 2.5rem 0;
 }
@@ -1669,8 +1669,13 @@ p {
 }
 
 .acquisition-image-item:nth-child(2) .acquisition-image-placeholder img,
-.acquisition-image-item:nth-child(3) .acquisition-image-placeholder img {
+.acquisition-image-item:nth-child(4) .acquisition-image-placeholder img {
     object-position: left center;
+}
+
+/* Recording ad image — adjust --recording-ad-y to move image up/down (0% = top, 50% = center, 100% = bottom) */
+.acquisition-image-item:nth-child(3) .acquisition-image-placeholder img {
+    object-position: center var(--recording-ad-y, 40%);
 }
 
 

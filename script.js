@@ -234,10 +234,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let rafId = null;
     let hideControlsTimeout = null;
     let hasStarted = false;
-    let isPlayAttemptPending = false;
     const CONTROLS_HIDE_DELAY = 15000;
     let lastNonZeroVolume = heroVideo.volume > 0 ? heroVideo.volume : 0.75;
-    let lastPlayToggleTime = 0;
 
     const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 
@@ -369,29 +367,15 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const toggleVideoPlayback = () => {
-        const now = Date.now();
-        if (now - lastPlayToggleTime < 300) return;
-        lastPlayToggleTime = now;
-
         if (heroVideo.paused || heroVideo.ended) {
-            isPlayAttemptPending = true;
-            exitIntroState();
-            setOverlayVisibility(false);
             const playPromise = heroVideo.play();
             if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Keep pending briefly — iOS can pause right after play resolves
-                    setTimeout(() => { isPlayAttemptPending = false; }, 500);
-                }).catch(() => {
+                playPromise.catch(() => {
                     // Mobile may block unmuted playback; retry muted
                     heroVideo.muted = true;
                     heroVideo.play().then(() => {
-                        setTimeout(() => { isPlayAttemptPending = false; }, 500);
                         syncVolumeUI();
-                    }).catch(() => {
-                        isPlayAttemptPending = false;
-                        setOverlayVisibility(true);
-                    });
+                    }).catch(() => {});
                 });
             }
         } else {
@@ -456,7 +440,8 @@ document.addEventListener('DOMContentLoaded', function() {
     showControls(false);
     syncVolumeUI();
 
-    heroVideo.addEventListener('play', () => {
+    heroVideo.addEventListener('playing', () => {
+        exitIntroState();
         updateButtonState();
         stopProgressAnimation();
         animateProgress();
@@ -464,22 +449,14 @@ document.addEventListener('DOMContentLoaded', function() {
         setOverlayVisibility(false);
     });
 
-    // Only exit intro state when video is truly playing (not just a blocked play event)
-    heroVideo.addEventListener('playing', () => {
-        exitIntroState();
-    });
-
     heroVideo.addEventListener('pause', () => {
-        if (isPlayAttemptPending) {
-            // iOS can fire pause during buffering after play() — ignore it
-            return;
-        }
         updateButtonState();
         stopProgressAnimation();
         updateProgressDisplay();
         showControls(false);
-        const shouldShowOverlay = hasStarted && !heroVideo.ended;
-        setOverlayVisibility(shouldShowOverlay);
+        if (hasStarted && !heroVideo.ended) {
+            setOverlayVisibility(true);
+        }
     });
 
     heroVideo.addEventListener('ended', () => {
@@ -491,17 +468,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     heroVideo.addEventListener('timeupdate', updateProgressDisplay);
-    heroVideo.addEventListener('waiting', () => {
-        if (isPlayAttemptPending) {
-            showControls(true);
-            setOverlayVisibility(false);
-        }
-    });
-    heroVideo.addEventListener('canplay', () => {
-        if (isPlayAttemptPending && heroVideo.paused) {
-            heroVideo.play().catch(() => {});
-        }
-    });
     heroVideo.addEventListener('loadedmetadata', () => {
         setProgress(INITIAL_PROGRESS);
         updateProgressDisplay();
@@ -562,18 +528,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const handleOverlayPlay = (event) => {
+    let handledByTouch = false;
+
+    const handleOverlayTouch = (event) => {
         event.stopPropagation();
+        event.preventDefault();
+        handledByTouch = true;
+        toggleVideoPlayback();
+    };
+
+    const handleOverlayClick = (event) => {
+        event.stopPropagation();
+        if (handledByTouch) {
+            handledByTouch = false;
+            return;
+        }
         toggleVideoPlayback();
     };
 
     if (overlayPlayButton) {
-        overlayPlayButton.addEventListener('click', handleOverlayPlay);
+        overlayPlayButton.addEventListener('touchend', handleOverlayTouch);
+        overlayPlayButton.addEventListener('click', handleOverlayClick);
     }
 
     const overlayDiv = videoWrapper ? videoWrapper.querySelector('.video-overlay-play') : null;
     if (overlayDiv) {
-        overlayDiv.addEventListener('click', handleOverlayPlay);
+        overlayDiv.addEventListener('touchend', handleOverlayTouch);
+        overlayDiv.addEventListener('click', handleOverlayClick);
     }
 
     const fullscreenToggle = customControls.querySelector('.video-fullscreen-toggle');

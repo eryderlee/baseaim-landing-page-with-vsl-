@@ -6,7 +6,8 @@
       "mcp__playwright__browser_evaluate",
       "Bash(python -:*)",
       "Bash(ls \"e:/websites/baseaim-landing-page-with-vsl-/\"*screen* \"e:/websites/baseaim-landing-page-with-vsl-/\"*Screen* \"e:/websites/baseaim-landing-page-with-vsl-/\"*screenshot*)",
-      "Bash(ls \"e:/websites/baseaim-landing-page-with-vsl-/\"*[Ss]creen*)"
+      "Bash(ls \"e:/websites/baseaim-landing-page-with-vsl-/\"*[Ss]creen*)",
+      "Bash(ls \"e:/websites/baseaim-landing-page-with-vsl-/\"*ad* \"e:/websites/baseaim-landing-page-with-vsl-/\"*Ad* \"e:/websites/baseaim-landing-page-with-vsl-/\"*record* \"e:/websites/baseaim-landing-page-with-vsl-/\"*Record*)"
     ]
   }
 }
