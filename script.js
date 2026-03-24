@@ -234,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let rafId = null;
     let hideControlsTimeout = null;
     let hasStarted = false;
+    let isPlayAttemptPending = false;
     const CONTROLS_HIDE_DELAY = 15000;
     let lastNonZeroVolume = heroVideo.volume > 0 ? heroVideo.volume : 0.75;
 
@@ -370,14 +371,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (heroVideo.paused || heroVideo.ended) {
             exitIntroState();
             setOverlayVisibility(false);
+            isPlayAttemptPending = true;
             const playPromise = heroVideo.play();
-            if (playPromise && playPromise.catch) {
-                playPromise.catch(() => {
-                    // Mobile may block unmuted autoplay; retry muted
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isPlayAttemptPending = false;
+                }).catch(() => {
+                    // Mobile may block unmuted playback; retry muted
                     heroVideo.muted = true;
                     heroVideo.play().then(() => {
+                        isPlayAttemptPending = false;
                         syncVolumeUI();
-                    }).catch(() => {});
+                    }).catch(() => {
+                        isPlayAttemptPending = false;
+                        // Both attempts failed — revert UI
+                        setOverlayVisibility(true);
+                    });
                 });
             }
         } else {
@@ -460,8 +469,10 @@ document.addEventListener('DOMContentLoaded', function() {
         stopProgressAnimation();
         updateProgressDisplay();
         showControls(false);
-        const shouldShowOverlay = hasStarted && !heroVideo.ended;
-        setOverlayVisibility(shouldShowOverlay);
+        if (!isPlayAttemptPending) {
+            const shouldShowOverlay = hasStarted && !heroVideo.ended;
+            setOverlayVisibility(shouldShowOverlay);
+        }
     });
 
     heroVideo.addEventListener('ended', () => {
