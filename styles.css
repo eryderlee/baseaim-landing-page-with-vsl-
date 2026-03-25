@@ -1391,7 +1391,7 @@ p {
 @media (min-width: 992px) {
     .frustration-layout {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        align-items: start;
+        align-items: stretch;
     }
 }
 
@@ -1647,9 +1647,10 @@ p {
 
 .acquisition-images {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    margin: 2.5rem 0;
+    margin: 2.5rem auto;
+    max-width: 900px;
 }
 
 .acquisition-image-item {
