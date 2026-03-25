@@ -144,7 +144,12 @@
     // =============================================
     function trackEngagement() {
         // --- Time on page (active tab only) ---
-        var milestones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 30, 60, 120];
+        var milestones = [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+            21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+            45, 60, 90, 120
+        ];
         var elapsed = 0;
         var nextIndex = 0;
         var timerActive = !document.hidden;
@@ -199,15 +204,31 @@
 
         sections.forEach(function (sec) {
             var el = document.getElementById(sec.id);
-            if (el && window.IntersectionObserver) {
+            if (!el) return;
+
+            var fireSectionView = function () {
+                if (sectionFired[sec.id]) return;
+                sectionFired[sec.id] = true;
+                window.dataLayer.push({
+                    event: 'ab_section_viewed',
+                    section_name: sec.name,
+                    ab_test_variant: variant
+                });
+            };
+
+            // Check if already visible on load
+            var rect = el.getBoundingClientRect();
+            var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            if (rect.top < viewportHeight && rect.bottom > 0) {
+                fireSectionView();
+                return;
+            }
+
+            // Watch for future visibility
+            if (window.IntersectionObserver) {
                 var obs = new IntersectionObserver(function (entries) {
-                    if (entries[0].isIntersecting && !sectionFired[sec.id]) {
-                        sectionFired[sec.id] = true;
-                        window.dataLayer.push({
-                            event: 'ab_section_viewed',
-                            section_name: sec.name,
-                            ab_test_variant: variant
-                        });
+                    if (entries[0].isIntersecting) {
+                        fireSectionView();
                         obs.disconnect();
                     }
                 }, { threshold: 0.3 });
@@ -232,16 +253,20 @@
             });
 
             video.addEventListener('timeupdate', function () {
-                if (!video.duration) return;
-                var pct = Math.round(video.currentTime / video.duration * 100);
-                var checkpoints = [1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 75];
-                for (var i = 0; i < checkpoints.length; i++) {
+                var sec = Math.floor(video.currentTime);
+                if (sec < 1) return;
+                // Every second up to 30s, then every 5s after that
+                var checkpoints = [];
+                var i;
+                for (i = 1; i <= 30; i++) checkpoints.push(i);
+                for (i = 35; i <= 115; i += 5) checkpoints.push(i);
+                for (i = 0; i < checkpoints.length; i++) {
                     var cp = checkpoints[i];
-                    if (pct >= cp && !videoFired['progress_' + cp]) {
-                        videoFired['progress_' + cp] = true;
+                    if (sec >= cp && !videoFired['sec_' + cp]) {
+                        videoFired['sec_' + cp] = true;
                         window.dataLayer.push({
                             event: 'ab_video_engagement',
-                            action: 'progress_' + cp,
+                            action: 'second_' + cp,
                             ab_test_variant: variant
                         });
                     }
@@ -259,6 +284,27 @@
                 }
             });
         }
+
+        // --- CTA button clicks ---
+        var ctaButtons = document.querySelectorAll('.btn-primary');
+        ctaButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var section = btn.closest('section, .sticky-cta, .hero-cta-desktop, .hero-cta-mobile');
+                var location = 'unknown';
+                if (section) {
+                    if (section.classList.contains('sticky-cta')) location = 'sticky_bar';
+                    else if (section.classList.contains('hero-cta-desktop')) location = 'hero_desktop';
+                    else if (section.classList.contains('hero-cta-mobile')) location = 'hero_mobile';
+                    else if (section.id) location = section.id;
+                    else if (section.className) location = section.className.split(' ')[0];
+                }
+                window.dataLayer.push({
+                    event: 'ab_cta_click',
+                    cta_location: location,
+                    ab_test_variant: variant
+                });
+            });
+        });
     }
 
     // =============================================
