@@ -611,6 +611,7 @@ p {
     pointer-events: none;
 }
 
+
 .video-wrapper.intro-state .video-progress {
     opacity: 0;
 }
@@ -931,7 +932,7 @@ p {
     position: absolute;
     inset: 0;
     border-radius: 16px;
-    background: linear-gradient(180deg, rgba(2, 6, 23, 0.6), rgba(2, 6, 23, 0.35));
+    background: transparent;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.35s ease, visibility 0.35s ease;
