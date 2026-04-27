@@ -64,6 +64,12 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
+    // Disable automatic config + automatic button-click scanning so the
+    // pixel doesn't inject focus/scroll behavior tied to detected
+    // conversion elements (the booking section) on ad traffic.
+    fbq('set', 'autoConfig', 'false', '904643748902958');
+    fbq('set', 'autoConfig', 'false', '807788339068966');
+    fbq.disablePushState = true;
     fbq('init', '904643748902958');
     fbq('init', '807788339068966');
     fbq('track', 'PageView');
