@@ -115,11 +115,12 @@
     // =============================================
     function setupConversionTracking() {
         // Append variant as Cal.com metadata so it appears in webhook payload.metadata
-        var calIframe = document.querySelector('iframe[src*="cal.com"]');
+        var calIframe = document.querySelector('iframe[data-src*="cal.com"], iframe[src*="cal.com"]');
         if (calIframe) {
-            var src = calIframe.getAttribute('src');
+            var attr = calIframe.hasAttribute('data-src') ? 'data-src' : 'src';
+            var src = calIframe.getAttribute(attr);
             var sep = src.indexOf('?') !== -1 ? '&' : '?';
-            calIframe.setAttribute('src', src + sep + 'metadata[ab_variant]=' + variant);
+            calIframe.setAttribute(attr, src + sep + 'metadata[ab_variant]=' + variant);
         }
 
         // Track when users scroll to booking section

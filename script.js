@@ -1,3 +1,37 @@
+// Defer Cal.com iframe load until the user actually interacts with the page.
+// Loading the iframe on initial paint lets Cal.com autofocus its date-picker,
+// which makes the browser scroll the parent page down to the booking section
+// — the bug we were seeing on Meta ad clicks.
+(function deferCalIframe() {
+    function arm() {
+        var iframe = document.querySelector('iframe[data-src*="cal.com"]');
+        if (!iframe) return;
+
+        var loaded = false;
+        function load() {
+            if (loaded) return;
+            loaded = true;
+            iframe.src = iframe.getAttribute('data-src');
+            iframe.removeAttribute('data-src');
+        }
+
+        var events = ['scroll', 'touchstart', 'mousedown', 'keydown', 'wheel'];
+        events.forEach(function (evt) {
+            window.addEventListener(evt, load, { once: true, passive: true });
+        });
+
+        // Fallback: load after 8s even without interaction so the calendar
+        // is ready by the time the user reaches the section organically.
+        setTimeout(load, 8000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', arm);
+    } else {
+        arm();
+    }
+})();
+
 // Render star ratings as inline SVGs with partial fill
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.star-rating[data-rating]').forEach(function(el) {
