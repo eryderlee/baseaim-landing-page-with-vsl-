@@ -95,7 +95,7 @@ function scrollToBooking() {
     if (calEmbed) {
         calEmbed.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-        const bookingSection = document.getElementById('booking');
+        const bookingSection = document.getElementById('book-call-section');
         if (bookingSection) {
             bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Sticky CTA visibility
 let lastScrollTop = 0;
 const stickyCTA = document.getElementById('sticky-cta');
-const bookingSection = document.getElementById('booking');
+const bookingSection = document.getElementById('book-call-section');
 
 function updateStickyCTAHeight() {
     if (!stickyCTA) {

@@ -124,7 +124,7 @@
         }
 
         // Track when users scroll to booking section
-        var bookingSection = document.getElementById('booking');
+        var bookingSection = document.getElementById('book-call-section');
         if (bookingSection && window.IntersectionObserver) {
             var observer = new IntersectionObserver(function (entries) {
                 if (entries[0].isIntersecting) {
@@ -199,7 +199,7 @@
             { id: 'solution', name: 'Guarantee' },
             { id: 'proof', name: 'Proof' },
             { id: 'faq', name: 'FAQ' },
-            { id: 'booking', name: 'Booking' }
+            { id: 'book-call-section', name: 'Booking' }
         ];
         var sectionFired = {};
 
