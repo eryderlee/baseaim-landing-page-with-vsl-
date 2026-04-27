@@ -20,7 +20,10 @@
 
             var userInteracted = false;
             var deadline = Date.now() + 2500;
-            var interactionEvents = ['touchstart', 'mousedown', 'keydown', 'wheel', 'pointerdown'];
+            // Only release on actual scroll-intent gestures. Clicks/taps
+            // (touchstart, mousedown, pointerdown) are excluded so tapping
+            // the video to play it doesn't lift the guard.
+            var interactionEvents = ['wheel', 'touchmove', 'keydown'];
 
             function flagInteraction() { userInteracted = true; }
             interactionEvents.forEach(function (evt) {

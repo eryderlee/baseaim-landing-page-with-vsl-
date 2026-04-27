@@ -15,10 +15,11 @@
             iframe.removeAttribute('data-src');
         }
 
-        // NOTE: deliberately NOT listening for 'scroll' — programmatic
-        // auto-scrolls (URL hash, scroll restoration, etc.) fire the same
-        // event and would bypass the deferred-load guard.
-        var events = ['touchstart', 'mousedown', 'keydown', 'wheel', 'pointerdown'];
+        // Only react to real scroll-intent gestures so a tap on the hero
+        // video doesn't load the calendar (and doesn't lift the scroll
+        // guard either). Programmatic auto-scrolls fire 'scroll' so it's
+        // also excluded here.
+        var events = ['wheel', 'touchmove', 'keydown'];
         events.forEach(function (evt) {
             window.addEventListener(evt, load, { once: true, passive: true });
         });
