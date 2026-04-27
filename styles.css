@@ -2325,7 +2325,6 @@ p {
 
 /* Smooth Scroll */
 html {
-    scroll-behavior: smooth;
     overflow-x: hidden;
 }
 
