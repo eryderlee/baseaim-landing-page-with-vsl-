@@ -6,16 +6,9 @@
     <title>Baseaim - Get 5 Qualified Booked Calls Per Month</title>
     <meta name="description" content="Baseaim builds predictable client acquisition systems for Australian Accounting Firms - performance-backed guarantee.">
 
-    <!-- Defeat ad-traffic auto-scroll. Three layers:
-         1. Disable native scroll restoration + strip URL hash.
-         2. Pin to top for a short window unless the user scrolls.
-         3. Intercept `scrollIntoView` so any third-party (GTM tag, Meta
-            Pixel, Cal.com focus-into-view, the Meta WebView itself)
-            cannot programmatically pull the page to the booking section
-            during the lock window. Calls tied to a real user gesture
-            (CTA button clicks within 1500 ms of a pointerdown/click)
-            are allowed through, so our own scrollToBooking() still
-            works. -->
+    <!-- Pin page to top until the user actually interacts. Fights any
+         auto-scroll caused by URL hashes, scroll restoration, or iframe focus
+         that browsers (especially Meta in-app webviews) trigger on ad loads. -->
     <script>
         (function () {
             if ('scrollRestoration' in history) {
@@ -25,53 +18,24 @@
                 history.replaceState(null, '', window.location.pathname + window.location.search);
             }
 
-            var ua = navigator.userAgent || '';
-            // FBAN/FBAV = Facebook in-app, Instagram = IG in-app, FB_IAB = FB in-app browser.
-            var isMetaInApp = /FBAN|FBAV|FB_IAB|FBIOS|FBSV|Instagram/i.test(ua);
-            // Hold the lock longer on Meta in-app browsers — they're the only place this fires.
-            var lockMs = isMetaInApp ? 5000 : 3000;
-            var hardLockUntil = Date.now() + lockMs;
+            var userInteracted = false;
+            var deadline = Date.now() + 2500;
+            // Only release on actual scroll-intent gestures. Clicks/taps
+            // (touchstart, mousedown, pointerdown) are excluded so tapping
+            // the video to play it doesn't lift the guard.
+            var interactionEvents = ['wheel', 'touchmove', 'keydown'];
 
-            // Capture native methods before anything else runs.
-            var nativeScrollTo = window.scrollTo.bind(window);
-            var nativeScrollIntoView = Element.prototype.scrollIntoView;
-
-            // Track user gesture timing. `pointerdown`/`click`/`keydown`
-            // are user-driven; `wheel`/`touchmove` are scroll gestures
-            // that should also lift the pin.
-            var lastUserGesture = 0;
-            var userScrolled = false;
-            function markGesture() { lastUserGesture = Date.now(); }
-            function markScroll() { userScrolled = true; lastUserGesture = Date.now(); }
-            ['pointerdown', 'click', 'keydown'].forEach(function (ev) {
-                window.addEventListener(ev, markGesture, true);
-            });
-            ['wheel', 'touchmove'].forEach(function (ev) {
-                window.addEventListener(ev, markScroll, { capture: true, passive: true });
+            function flagInteraction() { userInteracted = true; }
+            interactionEvents.forEach(function (evt) {
+                window.addEventListener(evt, flagInteraction, { once: true, passive: true });
             });
 
-            function isUserDriven() {
-                // scrollIntoView fired within 1.5s of a click/tap is treated as user-driven.
-                return (Date.now() - lastUserGesture) < 1500;
-            }
-
-            // Override scrollIntoView so auto-scroll attempts during the
-            // lock window are swallowed. User-driven calls pass through.
-            Element.prototype.scrollIntoView = function () {
-                if (Date.now() < hardLockUntil && !isUserDriven()) {
-                    return;
-                }
-                return nativeScrollIntoView.apply(this, arguments);
-            };
-
-            // Pin to top during the lock window. Releases instantly the
-            // moment the user actually scrolls.
             function pin() {
-                if (userScrolled) return;
+                if (userInteracted) return;
                 if (window.scrollY > 0) {
-                    nativeScrollTo(0, 0);
+                    window.scrollTo(0, 0);
                 }
-                if (Date.now() < hardLockUntil) {
+                if (Date.now() < deadline) {
                     requestAnimationFrame(pin);
                 }
             }
