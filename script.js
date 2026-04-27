@@ -1,7 +1,9 @@
-// Defer Cal.com iframe load until the user actually interacts with the page.
-// Loading the iframe on initial paint lets Cal.com autofocus its date-picker,
-// which makes the browser scroll the parent page down to the booking section
-// — the bug we were seeing on Meta ad clicks.
+// Defer the Cal.com iframe until it's actually scrolled into view, then
+// pin scroll position briefly around its load event. Cal.com autofocuses
+// an internal date-picker when its widget initialises; the browser
+// reacts to that focus by scrolling the parent page so the iframe is in
+// view, which is what was yanking ad-traffic users down to the booking
+// section the moment they tried to scroll.
 (function deferCalIframe() {
     function arm() {
         var iframe = document.querySelector('iframe[data-src*="cal.com"]');
@@ -11,22 +13,51 @@
         function load() {
             if (loaded) return;
             loaded = true;
+
+            var savedY = window.scrollY;
             iframe.src = iframe.getAttribute('data-src');
             iframe.removeAttribute('data-src');
+
+            // For ~1.2s after the iframe finishes loading, hold the page
+            // at the user's current scroll position. Defeats Cal.com's
+            // focus-induced "scrollIntoView" on the parent. Releases the
+            // moment the user actively scrolls.
+            iframe.addEventListener('load', function () {
+                var deadline = Date.now() + 1200;
+                var released = false;
+                var release = function () { released = true; };
+                ['wheel', 'touchmove', 'keydown'].forEach(function (evt) {
+                    window.addEventListener(evt, release, { once: true, passive: true });
+                });
+                function pin() {
+                    if (released || Date.now() > deadline) return;
+                    if (Math.abs(window.scrollY - savedY) > 20) {
+                        window.scrollTo(0, savedY);
+                    }
+                    requestAnimationFrame(pin);
+                }
+                requestAnimationFrame(pin);
+            });
         }
 
-        // Only react to real scroll-intent gestures so a tap on the hero
-        // video doesn't load the calendar (and doesn't lift the scroll
-        // guard either). Programmatic auto-scrolls fire 'scroll' so it's
-        // also excluded here.
-        var events = ['wheel', 'touchmove', 'keydown'];
-        events.forEach(function (evt) {
-            window.addEventListener(evt, load, { once: true, passive: true });
-        });
-
-        // Fallback: load after 8s even without interaction so the calendar
-        // is ready by the time the user reaches the section organically.
-        setTimeout(load, 8000);
+        // Only load when the booking section is actually entering the
+        // viewport — not on first scroll. By the time it intersects, the
+        // user is already near the booking section, so any focus-induced
+        // scroll is small and can't yank them away from the hero.
+        if (window.IntersectionObserver) {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        load();
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.05, rootMargin: '0px 0px -150px 0px' });
+            observer.observe(iframe);
+        } else {
+            // Old browsers: just wait for the user to dwell on the page
+            setTimeout(load, 12000);
+        }
     }
 
     if (document.readyState === 'loading') {
