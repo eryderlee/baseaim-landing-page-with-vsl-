@@ -6,15 +6,38 @@
     <title>Baseaim - Get 5 Qualified Booked Calls Per Month</title>
     <meta name="description" content="Baseaim builds predictable client acquisition systems for Australian Accounting Firms - performance-backed guarantee.">
 
-    <!-- Force page to start at top even if ad URL contains a hash like #booking -->
+    <!-- Pin page to top until the user actually interacts. Fights any
+         auto-scroll caused by URL hashes, scroll restoration, or iframe focus
+         that browsers (especially Meta in-app webviews) trigger on ad loads. -->
     <script>
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
-        if (window.location.hash) {
-            history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-        window.addEventListener('load', function () { window.scrollTo(0, 0); });
+        (function () {
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            if (window.location.hash) {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+
+            var userInteracted = false;
+            var deadline = Date.now() + 2500;
+            var interactionEvents = ['touchstart', 'mousedown', 'keydown', 'wheel', 'pointerdown'];
+
+            function flagInteraction() { userInteracted = true; }
+            interactionEvents.forEach(function (evt) {
+                window.addEventListener(evt, flagInteraction, { once: true, passive: true });
+            });
+
+            function pin() {
+                if (userInteracted) return;
+                if (window.scrollY > 0) {
+                    window.scrollTo(0, 0);
+                }
+                if (Date.now() < deadline) {
+                    requestAnimationFrame(pin);
+                }
+            }
+            requestAnimationFrame(pin);
+        })();
     </script>
 
     <!-- A/B Test Engine — load before styles to prevent flicker -->

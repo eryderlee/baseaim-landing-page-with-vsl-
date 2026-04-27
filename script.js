@@ -15,7 +15,10 @@
             iframe.removeAttribute('data-src');
         }
 
-        var events = ['scroll', 'touchstart', 'mousedown', 'keydown', 'wheel'];
+        // NOTE: deliberately NOT listening for 'scroll' — programmatic
+        // auto-scrolls (URL hash, scroll restoration, etc.) fire the same
+        // event and would bypass the deferred-load guard.
+        var events = ['touchstart', 'mousedown', 'keydown', 'wheel', 'pointerdown'];
         events.forEach(function (evt) {
             window.addEventListener(evt, load, { once: true, passive: true });
         });
