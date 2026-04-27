@@ -276,7 +276,11 @@ document.addEventListener('DOMContentLoaded', function() {
         rootMargin: '200px'
     });
 
-    const lazyVideos = document.querySelectorAll('iframe[data-src]');
+    // Skip the Cal.com iframe — deferCalIframe() above handles it with a
+    // scroll-pin around its load event. Letting this generic observer also
+    // claim it caused a race where the wider rootMargin loaded the iframe
+    // first and bypassed the pin.
+    const lazyVideos = document.querySelectorAll('iframe[data-src]:not([data-src*="cal.com"])');
     lazyVideos.forEach(video => {
         videoObserver.observe(video);
     });
