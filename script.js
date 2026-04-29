@@ -1,62 +1,93 @@
-// Defer the Cal.com iframe until it's actually scrolled into view, then
-// pin scroll position briefly around its load event. Cal.com autofocuses
-// an internal date-picker when its widget initialises; the browser
-// reacts to that focus by scrolling the parent page so the iframe is in
-// view, which is what was yanking ad-traffic users down to the booking
-// section the moment they tried to scroll.
-(function deferCalIframe() {
-    function arm() {
-        var iframe = document.querySelector('iframe[data-src*="cal.com"]');
-        if (!iframe) return;
+// Defer Cal.com inline embed until the booking section enters the
+// viewport. Cal.com tightened their X-Frame-Options policy so a bare
+// iframe of cal.com/<team>/<event> no longer renders inside third-party
+// sites — we have to use the official embed.js loader. We still pin
+// scroll briefly around init so the embed's auto-focus into the
+// date-picker doesn't yank the page.
+(function deferCalInlineEmbed() {
+    var inited = false;
 
-        var loaded = false;
-        function load() {
-            if (loaded) return;
-            loaded = true;
+    function init() {
+        if (inited) return;
+        var target = document.getElementById('my-cal-inline');
+        if (!target) return;
+        inited = true;
 
-            var savedY = window.scrollY;
-            iframe.src = iframe.getAttribute('data-src');
-            iframe.removeAttribute('data-src');
+        var savedY = window.scrollY;
 
-            // For ~1.2s after the iframe finishes loading, hold the page
-            // at the user's current scroll position. Defeats Cal.com's
-            // focus-induced "scrollIntoView" on the parent. Releases the
-            // moment the user actively scrolls.
-            iframe.addEventListener('load', function () {
-                var deadline = Date.now() + 1200;
-                var released = false;
-                var release = function () { released = true; };
-                ['wheel', 'touchmove', 'keydown'].forEach(function (evt) {
-                    window.addEventListener(evt, release, { once: true, passive: true });
-                });
-                function pin() {
-                    if (released || Date.now() > deadline) return;
-                    if (Math.abs(window.scrollY - savedY) > 20) {
-                        window.scrollTo(0, savedY);
-                    }
-                    requestAnimationFrame(pin);
+        // Cal.com official inline embed loader
+        (function (C, A, L) {
+            var p = function (a, ar) { a.q.push(ar); };
+            var d = C.document;
+            C.Cal = C.Cal || function () {
+                var cal = C.Cal;
+                var ar = arguments;
+                if (!cal.loaded) {
+                    cal.ns = {};
+                    cal.q = cal.q || [];
+                    d.head.appendChild(d.createElement('script')).src = A;
+                    cal.loaded = true;
                 }
-                requestAnimationFrame(pin);
-            });
-        }
+                if (ar[0] === L) {
+                    var api = function () { p(api, arguments); };
+                    var namespace = ar[1];
+                    api.q = api.q || [];
+                    if (typeof namespace === 'string') {
+                        cal.ns[namespace] = cal.ns[namespace] || api;
+                        p(cal.ns[namespace], ar);
+                        p(cal, ['initNamespace', namespace]);
+                    } else { p(cal, ar); }
+                    return;
+                }
+                p(cal, ar);
+            };
+        })(window, 'https://app.cal.com/embed/embed.js', 'Cal');
 
-        // Only load when the booking section is actually entering the
-        // viewport — not on first scroll. By the time it intersects, the
-        // user is already near the booking section, so any focus-induced
-        // scroll is small and can't yank them away from the hero.
+        var abVariant;
+        try { abVariant = localStorage.getItem('ab_variant') || 'A'; }
+        catch (e) { abVariant = 'A'; }
+
+        Cal('init', 'khan', { origin: 'https://cal.com' });
+        Cal.ns.khan('inline', {
+            elementOrSelector: '#my-cal-inline',
+            config: { layout: 'month_view', metadata: { ab_variant: abVariant } },
+            calLink: 'team/baseaim/khan'
+        });
+
+        // Pin briefly to defeat focus-induced scrollIntoView when the
+        // calendar widget mounts. Releases on real scroll gestures.
+        var deadline = Date.now() + 1500;
+        var released = false;
+        var release = function () { released = true; };
+        ['wheel', 'touchmove', 'keydown'].forEach(function (evt) {
+            window.addEventListener(evt, release, { once: true, passive: true });
+        });
+        function pin() {
+            if (released || Date.now() > deadline) return;
+            if (Math.abs(window.scrollY - savedY) > 20) {
+                window.scrollTo(0, savedY);
+            }
+            requestAnimationFrame(pin);
+        }
+        requestAnimationFrame(pin);
+    }
+
+    function arm() {
+        var target = document.getElementById('my-cal-inline');
+        if (!target) return;
+
         if (window.IntersectionObserver) {
             var observer = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
-                        load();
+                        init();
                         observer.disconnect();
                     }
                 });
             }, { threshold: 0.05, rootMargin: '0px 0px -150px 0px' });
-            observer.observe(iframe);
+            observer.observe(target);
         } else {
-            // Old browsers: just wait for the user to dwell on the page
-            setTimeout(load, 12000);
+            setTimeout(init, 12000);
         }
     }
 

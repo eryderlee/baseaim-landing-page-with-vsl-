@@ -114,14 +114,9 @@
     // CONVERSION PROXY — booking section + Cal.com URL param
     // =============================================
     function setupConversionTracking() {
-        // Append variant as Cal.com metadata so it appears in webhook payload.metadata
-        var calIframe = document.querySelector('iframe[data-src*="cal.com"], iframe[src*="cal.com"]');
-        if (calIframe) {
-            var attr = calIframe.hasAttribute('data-src') ? 'data-src' : 'src';
-            var src = calIframe.getAttribute(attr);
-            var sep = src.indexOf('?') !== -1 ? '&' : '?';
-            calIframe.setAttribute(attr, src + sep + 'metadata[ab_variant]=' + variant);
-        }
+        // Cal.com metadata is now passed via the inline embed config in
+        // script.js (deferCalInlineEmbed). The variant is read from
+        // localStorage there, which we set above.
 
         // Track when users scroll to booking section
         var bookingSection = document.getElementById('book-call-section');
