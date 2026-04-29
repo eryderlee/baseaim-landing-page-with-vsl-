@@ -41,7 +41,7 @@
                 }
                 p(cal, ar);
             };
-        })(window, 'https://app.cal.com/embed/embed.js', 'Cal');
+        })(window, 'https://app.cal.com/embed/embed.js', 'init');
 
         var abVariant;
         try { abVariant = localStorage.getItem('ab_variant') || 'A'; }
