@@ -1,9 +1,7 @@
 // Defer Cal.com inline embed until the booking section enters the
 // viewport. Cal.com tightened their X-Frame-Options policy so a bare
 // iframe of cal.com/<team>/<event> no longer renders inside third-party
-// sites — we have to use the official embed.js loader. We still pin
-// scroll briefly around init so the embed's auto-focus into the
-// date-picker doesn't yank the page.
+// sites — we have to use the official embed.js loader.
 (function deferCalInlineEmbed() {
     var inited = false;
 
@@ -12,8 +10,6 @@
         var target = document.getElementById('my-cal-inline');
         if (!target) return;
         inited = true;
-
-        var savedY = window.scrollY;
 
         // Cal.com official inline embed loader
         (function (C, A, L) {
@@ -53,23 +49,6 @@
             config: { layout: 'month_view', metadata: { ab_variant: abVariant } },
             calLink: 'team/baseaim/khan'
         });
-
-        // Pin briefly to defeat focus-induced scrollIntoView when the
-        // calendar widget mounts. Releases on real scroll gestures.
-        var deadline = Date.now() + 1500;
-        var released = false;
-        var release = function () { released = true; };
-        ['wheel', 'touchmove', 'keydown'].forEach(function (evt) {
-            window.addEventListener(evt, release, { once: true, passive: true });
-        });
-        function pin() {
-            if (released || Date.now() > deadline) return;
-            if (Math.abs(window.scrollY - savedY) > 20) {
-                window.scrollTo(0, savedY);
-            }
-            requestAnimationFrame(pin);
-        }
-        requestAnimationFrame(pin);
     }
 
     function arm() {
