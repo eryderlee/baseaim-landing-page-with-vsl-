@@ -20,15 +20,20 @@
 
             var userInteracted = false;
             var deadline = Date.now() + 2500;
-            // Only release on actual scroll-intent gestures. Clicks/taps
-            // (touchstart, mousedown, pointerdown) are excluded so tapping
-            // the video to play it doesn't lift the guard.
+            // Release on real scroll-intent gestures or on a button press
+            // (e.g., a booking CTA). Bare clicks/taps on the video are
+            // ignored so playing the video doesn't lift the guard.
             var interactionEvents = ['wheel', 'touchmove', 'keydown'];
 
             function flagInteraction() { userInteracted = true; }
             interactionEvents.forEach(function (evt) {
                 window.addEventListener(evt, flagInteraction, { once: true, passive: true });
             });
+            window.addEventListener('click', function (e) {
+                if (e.target && e.target.closest && e.target.closest('button')) {
+                    flagInteraction();
+                }
+            }, { capture: true, passive: true });
 
             function pin() {
                 if (userInteracted) return;
