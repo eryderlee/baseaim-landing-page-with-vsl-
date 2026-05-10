@@ -84,7 +84,7 @@
                         observer.disconnect();
                     }
                 });
-            }, { threshold: 0.05, rootMargin: '0px 0px -150px 0px' });
+            }, { threshold: 0, rootMargin: '0px 0px 800px 0px' });
             observer.observe(target);
         } else {
             setTimeout(init, 12000);
