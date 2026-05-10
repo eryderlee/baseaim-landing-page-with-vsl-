@@ -89,7 +89,19 @@
         } else {
             setTimeout(init, 12000);
         }
+
+        // Prewarm on pointerdown of any booking CTA — fires before click and
+        // before smooth-scroll starts, so the embed mounts during the scroll.
+        document.addEventListener('pointerdown', function (e) {
+            var t = e.target;
+            if (!t || !t.closest) return;
+            var btn = t.closest('[onclick*="scrollToBooking"]');
+            if (btn) init();
+        }, { capture: true, passive: true });
     }
+
+    // Expose so scrollToBooking() can prime the embed before scrolling.
+    window.__primeCalEmbed = init;
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', arm);
@@ -122,6 +134,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Smooth scroll to cal.com embed
 function scrollToBooking() {
+    // Kick off the embed before scrolling so it mounts during the scroll
+    // animation instead of the user watching it load on arrival.
+    if (window.__primeCalEmbed) window.__primeCalEmbed();
+
     const calEmbed = document.querySelector('.cal-embed');
     if (calEmbed) {
         calEmbed.scrollIntoView({ behavior: 'smooth', block: 'start' });
