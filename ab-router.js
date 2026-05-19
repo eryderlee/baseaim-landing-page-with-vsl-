@@ -71,6 +71,12 @@
             'max-age=' + maxAge,
             'samesite=lax'
         ];
+        // Scope to .baseaim.co so the variant is readable from any subdomain
+        // (e.g. thankyou.baseaim.co, which is where Cal.com redirects after a
+        // successful booking and where we fire the conversion event).
+        if (location.hostname.indexOf('baseaim.co') !== -1) {
+            parts.push('domain=.baseaim.co');
+        }
         if (location.protocol === 'https:') parts.push('secure');
         document.cookie = parts.join('; ');
     }
@@ -151,7 +157,8 @@
         reset: function () {
             try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
             try { localStorage.removeItem(STORAGE_KEY + '_time'); } catch (e) {}
-            document.cookie = COOKIE_NAME + '=; path=/; max-age=0';
+            document.cookie = COOKIE_NAME + '=; path=/; max-age=0' +
+                (location.hostname.indexOf('baseaim.co') !== -1 ? '; domain=.baseaim.co' : '');
             location.reload();
         }
     };
