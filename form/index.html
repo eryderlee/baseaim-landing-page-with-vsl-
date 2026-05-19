@@ -686,11 +686,14 @@
 
             // Track form submission with Meta Pixel
             if (typeof fbq !== 'undefined') {
+                var leadVariant = (window.BASEAIM_AB && window.BASEAIM_AB.variant) || 'form';
                 fbq('track', 'Lead', {
                     content_name: 'Strategy Call Form',
                     firm_name: firmName,
                     challenge: revenue,
-                    ab_variant: (window.BASEAIM_AB && window.BASEAIM_AB.variant) || 'form',
+                    ab_variant: leadVariant,
+                    ab_test_variant: leadVariant,
+                    ab_site: 'form',
                     ab_test_name: 'vsl_vs_form'
                 });
             }

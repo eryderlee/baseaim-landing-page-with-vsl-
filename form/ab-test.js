@@ -18,8 +18,16 @@
 
     window.dataLayer = window.dataLayer || [];
 
+    // Push BOTH ab_variant (new key) and ab_test_variant (legacy key matched
+    // by the existing GA4 "AB Test Variant" dimension + GTM dlv variable).
     function track(event, props) {
-        var payload = { event: event, ab_test_name: TEST_NAME, ab_variant: VARIANT, ab_site: 'form' };
+        var payload = {
+            event: event,
+            ab_test_name: TEST_NAME,
+            ab_variant: VARIANT,
+            ab_test_variant: VARIANT,
+            ab_site: 'form'
+        };
         if (props) {
             for (var k in props) if (Object.prototype.hasOwnProperty.call(props, k)) payload[k] = props[k];
         }
@@ -28,7 +36,12 @@
 
     function fbqCustom(name, props) {
         if (typeof fbq === 'undefined') return;
-        var payload = { ab_test_name: TEST_NAME, ab_variant: VARIANT, ab_site: 'form' };
+        var payload = {
+            ab_test_name: TEST_NAME,
+            ab_variant: VARIANT,
+            ab_test_variant: VARIANT,
+            ab_site: 'form'
+        };
         if (props) for (var k in props) if (Object.prototype.hasOwnProperty.call(props, k)) payload[k] = props[k];
         try { fbq('trackCustom', name, payload); } catch (e) {}
     }
