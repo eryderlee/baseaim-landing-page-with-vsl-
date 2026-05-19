@@ -1,145 +1,132 @@
 /**
- * Baseaim A/B Testing Engine
- * Lightweight client-side A/B testing for headline + VSL video
- * Integrates with GTM and Meta Pixel
+ * Baseaim A/B Tracker — VSL site
+ *
+ * Reads the variant assignment from window.BASEAIM_AB (set by ab-router.js)
+ * and pushes engagement + conversion events to dataLayer (for GTM/GA4) and
+ * Meta Pixel, all tagged with ab_variant so the two sites can be compared.
+ *
+ * The router handles the actual variant assignment and any redirect. By the
+ * time this runs, the visitor is on the correct site for their variant.
  */
 (function () {
     'use strict';
 
-    // =============================================
-    // TEST CONFIGURATION — Edit your variants here
-    // =============================================
-    var TESTS = {
-        headline: {
-            A: {
-                html: '<span style="font-size:2rem;">Accountants</span> <br> <span class="headline-highlight listen-up-highlight" style="font-size:1.9rem">Listen <span id="secret-p" style="cursor:default">up</span></span><br><br><strong>THREE</strong> new clients <br> every single month<span class="headline-br-mid" style="display:block;"></span><span class="headline-highlight" style="font-size:2.55rem"> Or you Don\'t Pay</span>',
-                version: 'control'
-            },
-            B: {
-                // REPLACE with your variant B headline
-                html: 'Get <span class="headline-highlight">Garunteed results...</span> or you<span class="headline-highlight"> Don\'t Pay Us</span>',
-                version: 'variant_b'
-            }
-        },
-        subheadline: {
-            A: {
-                html: '',
-                version: 'control'
-            },
-            B: {
-                html: 'Only for Australian Accounting Firms',
-                version: 'variant_b'
-            }
-        },
-        vsl: {
-            A: {
-                src: 'final-vsl.mp4',
-                poster: 'thumbnail 2.png',
-                version: 'control'
-            },
-            B: {
-                // REPLACE with your variant B video file and poster
-                src: 'vsl mp4.mp4',
-                poster: 'thumbnail 2.png',
-                version: 'variant_b'
-            }
+    var AB = window.BASEAIM_AB || { testName: 'vsl_vs_form', variant: 'vsl', site: 'vsl', source: 'fallback' };
+    var VARIANT = AB.variant;
+    var TEST_NAME = AB.testName;
+
+    window.dataLayer = window.dataLayer || [];
+
+    function track(event, props) {
+        var payload = { event: event, ab_test_name: TEST_NAME, ab_variant: VARIANT, ab_site: 'vsl' };
+        if (props) {
+            for (var k in props) if (Object.prototype.hasOwnProperty.call(props, k)) payload[k] = props[k];
         }
-    };
-
-    // =============================================
-    // ANTI-FLICKER — hide elements until variant is applied
-    // =============================================
-    var antiFlicker = document.createElement('style');
-    antiFlicker.textContent = '.headline, .video-intro, .hero-video video { opacity: 0 !important; }';
-    document.head.appendChild(antiFlicker);
-
-    // =============================================
-    // VARIANT ASSIGNMENT — locked to A, tracking still active
-    // =============================================
-    var variant = 'A';
-    localStorage.setItem('ab_variant', variant);
-    localStorage.setItem('ab_variant_time', new Date().toISOString());
-
-    // =============================================
-    // APPLY VARIANTS
-    // =============================================
-    function applyVariants() {
-        var headline = document.querySelector('h1.headline');
-        if (headline) {
-            headline.innerHTML = TESTS.headline[variant].html;
-        }
-
-        var subheadline = document.querySelector('p.video-intro');
-        if (subheadline) {
-            subheadline.innerHTML = TESTS.subheadline[variant].html;
-        }
-
-        var video = document.querySelector('.hero-video video');
-        var source = video ? video.querySelector('source') : null;
-        if (video && source) {
-            var newSrc = new URL(TESTS.vsl[variant].src, document.baseURI).href;
-            if (source.src !== newSrc) {
-                source.src = TESTS.vsl[variant].src;
-                video.load();
-            }
-            video.poster = TESTS.vsl[variant].poster;
-        }
-
-        // Remove anti-flicker
-        antiFlicker.remove();
+        window.dataLayer.push(payload);
     }
 
-    // =============================================
-    // ANALYTICS — GTM + Meta Pixel
-    // =============================================
-    function trackAssignment() {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-            event: 'ab_test_assigned',
-            ab_test_name: 'headline_vsl_test',
-            ab_test_variant: variant,
-            ab_headline_version: TESTS.headline[variant].version,
-            ab_vsl_version: TESTS.vsl[variant].version
-        });
-
-        if (typeof fbq !== 'undefined') {
-            fbq('trackCustom', 'ABTestAssigned', {
-                test_name: 'headline_vsl_test',
-                variant: variant
-            });
-        }
+    function fbqCustom(name, props) {
+        if (typeof fbq === 'undefined') return;
+        var payload = { ab_test_name: TEST_NAME, ab_variant: VARIANT, ab_site: 'vsl' };
+        if (props) for (var k in props) if (Object.prototype.hasOwnProperty.call(props, k)) payload[k] = props[k];
+        try { fbq('trackCustom', name, payload); } catch (e) {}
     }
 
-    // =============================================
-    // CONVERSION PROXY — booking section + Cal.com URL param
-    // =============================================
-    function setupConversionTracking() {
-        // Cal.com metadata is now passed via the inline embed config in
-        // script.js (deferCalInlineEmbed). The variant is read from
-        // localStorage there, which we set above.
+    // ============================================================
+    // Assignment fire (every pageview, so GA4 sees the dimension)
+    // ============================================================
+    track('ab_test_assigned', { ab_assignment_source: AB.source });
+    fbqCustom('ABTestAssigned', { source: AB.source });
 
-        // Track when users scroll to booking section
-        var bookingSection = document.getElementById('book-call-section');
-        if (bookingSection && window.IntersectionObserver) {
-            var observer = new IntersectionObserver(function (entries) {
-                if (entries[0].isIntersecting) {
-                    observer.disconnect();
-                    window.dataLayer = window.dataLayer || [];
-                    window.dataLayer.push({
-                        event: 'booking_section_viewed',
-                        ab_test_variant: variant
-                    });
+    // ============================================================
+    // Cal.com — propagate variant as booking metadata
+    //
+    // Two paths cover both the legacy raw-iframe embed and the current
+    // official Cal.com inline embed (mounted by script.js's
+    // deferCalInlineEmbed, which reads the variant from localStorage).
+    // The router writes the variant to localStorage on every visit.
+    // ============================================================
+    function tagCalEmbed() {
+        var calIframe = document.querySelector('iframe[src*="cal.com"]');
+        if (!calIframe) return;
+        var src = calIframe.getAttribute('src');
+        if (src.indexOf('metadata%5Bab_variant%5D=') !== -1 || src.indexOf('metadata[ab_variant]=') !== -1) return;
+        var sep = src.indexOf('?') !== -1 ? '&' : '?';
+        calIframe.setAttribute('src', src + sep + 'metadata[ab_variant]=' + VARIANT);
+    }
+
+    // ============================================================
+    // Cal.com booking confirmation — listen for postMessage from iframe
+    //
+    // Cal.com's embed iframe broadcasts events via window.postMessage. Naming
+    // has varied over versions, so we match defensively on type/action +
+    // booking + success/complete/confirmed. Fires once per pageview.
+    // ============================================================
+    var calBookingFired = false;
+    function trackCalBookings() {
+        window.addEventListener('message', function (e) {
+            if (!e || !e.origin) return;
+            if (e.origin.indexOf('cal.com') === -1) return;
+            var d = e.data;
+            if (!d || (typeof d !== 'object' && typeof d !== 'string')) return;
+
+            // Cal sometimes ships JSON strings, sometimes objects.
+            if (typeof d === 'string') {
+                try { d = JSON.parse(d); } catch (err) { return; }
+            }
+
+            var label = String(d.type || d.action || d.name || '').toLowerCase();
+            var isBooking = label.indexOf('booking') !== -1 ||
+                            label.indexOf('book_successful') !== -1 ||
+                            label.indexOf('book-successful') !== -1;
+            var isSuccess = label.indexOf('success') !== -1 ||
+                            label.indexOf('confirmed') !== -1 ||
+                            label.indexOf('complete') !== -1;
+
+            if (isBooking && isSuccess && !calBookingFired) {
+                calBookingFired = true;
+                var bookingData = d.data || d.payload || {};
+                track('cal_booking_confirmed', {
+                    cal_event_type: label,
+                    booking_uid: bookingData.uid || bookingData.bookingId || null,
+                    event_type_slug: bookingData.eventTypeSlug || bookingData.slug || null
+                });
+                fbqCustom('CalBookingConfirmed', { cal_event_type: label });
+                // Also fire as standard Meta Pixel Schedule event for ads optimization.
+                if (typeof fbq !== 'undefined') {
+                    try {
+                        fbq('track', 'Schedule', {
+                            ab_test_name: TEST_NAME,
+                            ab_variant: VARIANT,
+                            ab_site: 'vsl'
+                        });
+                    } catch (err) {}
                 }
-            }, { threshold: 0.3 });
-            observer.observe(bookingSection);
-        }
+            }
+        });
     }
 
-    // =============================================
-    // ENGAGEMENT TRACKING — time, scroll, video
-    // =============================================
+    // ============================================================
+    // Booking section visibility = soft lead signal
+    // ============================================================
+    function trackBookingSectionView() {
+        var bookingSection = document.getElementById('book-call-section') || document.getElementById('booking');
+        if (!bookingSection || !window.IntersectionObserver) return;
+        var observer = new IntersectionObserver(function (entries) {
+            if (entries[0].isIntersecting) {
+                observer.disconnect();
+                track('booking_section_viewed');
+                fbqCustom('BookingSectionViewed');
+            }
+        }, { threshold: 0.3 });
+        observer.observe(bookingSection);
+    }
+
+    // ============================================================
+    // Engagement: time on page, scroll depth, section views, video, CTAs
+    // ============================================================
     function trackEngagement() {
-        // --- Time on page (active tab only) ---
+        // Time on page (active tab only)
         var milestones = [
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
             11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -154,11 +141,7 @@
             if (!timerActive || nextIndex >= milestones.length) return;
             elapsed++;
             if (elapsed >= milestones[nextIndex]) {
-                window.dataLayer.push({
-                    event: 'ab_time_on_page',
-                    seconds: milestones[nextIndex],
-                    ab_test_variant: variant
-                });
+                track('ab_time_on_page', { seconds: milestones[nextIndex] });
                 nextIndex++;
             }
         }, 1000);
@@ -167,26 +150,21 @@
             timerActive = !document.hidden;
         });
 
-        // --- Scroll depth milestones (percentage) ---
+        // Scroll depth
         var scrollFired = {};
         var scrollThresholds = [25, 50, 75, 100];
-
         window.addEventListener('scroll', function () {
             var pct = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
             for (var i = 0; i < scrollThresholds.length; i++) {
                 var t = scrollThresholds[i];
                 if (pct >= t && !scrollFired[t]) {
                     scrollFired[t] = true;
-                    window.dataLayer.push({
-                        event: 'ab_scroll_depth',
-                        depth: t,
-                        ab_test_variant: variant
-                    });
+                    track('ab_scroll_depth', { depth: t });
                 }
             }
         }, { passive: true });
 
-        // --- Section visibility tracking ---
+        // Section visibility
         var sections = [
             { id: 'hero', name: 'Hero' },
             { id: 'frustration', name: 'Trust & Story' },
@@ -197,91 +175,56 @@
             { id: 'book-call-section', name: 'Booking' }
         ];
         var sectionFired = {};
-
         sections.forEach(function (sec) {
             var el = document.getElementById(sec.id);
             if (!el) return;
-
-            var fireSectionView = function () {
+            var fire = function () {
                 if (sectionFired[sec.id]) return;
                 sectionFired[sec.id] = true;
-                window.dataLayer.push({
-                    event: 'ab_section_viewed',
-                    section_name: sec.name,
-                    ab_test_variant: variant
-                });
+                track('ab_section_viewed', { section_name: sec.name });
             };
-
-            // Check if already visible on load
             var rect = el.getBoundingClientRect();
-            var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            if (rect.top < viewportHeight && rect.bottom > 0) {
-                fireSectionView();
-                return;
-            }
-
-            // Watch for future visibility
+            var vh = window.innerHeight || document.documentElement.clientHeight;
+            if (rect.top < vh && rect.bottom > 0) { fire(); return; }
             if (window.IntersectionObserver) {
                 var obs = new IntersectionObserver(function (entries) {
-                    if (entries[0].isIntersecting) {
-                        fireSectionView();
-                        obs.disconnect();
-                    }
+                    if (entries[0].isIntersecting) { fire(); obs.disconnect(); }
                 }, { threshold: 0.3 });
                 obs.observe(el);
             }
         });
 
-        // --- Video engagement ---
+        // Video engagement
         var video = document.querySelector('.hero-video video');
         if (video) {
             var videoFired = {};
-
             video.addEventListener('play', function () {
-                if (!videoFired.play) {
-                    videoFired.play = true;
-                    window.dataLayer.push({
-                        event: 'ab_video_engagement',
-                        action: 'play',
-                        ab_test_variant: variant
-                    });
-                }
+                if (videoFired.play) return;
+                videoFired.play = true;
+                track('ab_video_engagement', { action: 'play' });
             });
-
             video.addEventListener('timeupdate', function () {
                 var sec = Math.floor(video.currentTime);
                 if (sec < 1) return;
-                // Every second up to 30s, then every 5s after that
-                var checkpoints = [];
-                var i;
+                var checkpoints = [], i;
                 for (i = 1; i <= 30; i++) checkpoints.push(i);
                 for (i = 35; i <= 115; i += 5) checkpoints.push(i);
                 for (i = 0; i < checkpoints.length; i++) {
                     var cp = checkpoints[i];
                     if (sec >= cp && !videoFired['sec_' + cp]) {
                         videoFired['sec_' + cp] = true;
-                        window.dataLayer.push({
-                            event: 'ab_video_engagement',
-                            action: 'second_' + cp,
-                            ab_test_variant: variant
-                        });
+                        track('ab_video_engagement', { action: 'second_' + cp });
                     }
                 }
             });
-
             video.addEventListener('ended', function () {
-                if (!videoFired.complete) {
-                    videoFired.complete = true;
-                    window.dataLayer.push({
-                        event: 'ab_video_engagement',
-                        action: 'complete',
-                        ab_test_variant: variant
-                    });
-                }
+                if (videoFired.complete) return;
+                videoFired.complete = true;
+                track('ab_video_engagement', { action: 'complete' });
             });
         }
 
-        // --- CTA button clicks ---
+        // CTA button clicks
         var ctaButtons = document.querySelectorAll('.btn-primary');
         ctaButtons.forEach(function (btn) {
             btn.addEventListener('click', function () {
@@ -294,41 +237,24 @@
                     else if (section.id) location = section.id;
                     else if (section.className) location = section.className.split(' ')[0];
                 }
-                window.dataLayer.push({
-                    event: 'ab_cta_click',
-                    cta_location: location,
-                    ab_test_variant: variant
-                });
+                track('ab_cta_click', { cta_location: location });
             });
         });
     }
 
-    // =============================================
+    // ============================================================
     // INIT
-    // =============================================
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () {
-            applyVariants();
-            trackAssignment();
-            setupConversionTracking();
-            trackEngagement();
-        });
-    } else {
-        applyVariants();
-        trackAssignment();
-        setupConversionTracking();
+    // ============================================================
+    function init() {
+        tagCalEmbed();
+        trackBookingSectionView();
+        trackCalBookings();
         trackEngagement();
     }
 
-    // =============================================
-    // DEBUG HELPER — use in browser console
-    // =============================================
-    window.BASEAIM_AB_TEST = {
-        variant: variant,
-        reset: function () {
-            localStorage.removeItem('ab_variant');
-            localStorage.removeItem('ab_variant_time');
-            location.reload();
-        }
-    };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();

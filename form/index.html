@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseaim - Get 5 Qualified Booked Calls Per Month</title>
+    <meta name="description" content="Baseaim builds predictable client acquisition systems for Australian Accounting Firms - performance-backed guarantee.">
+
+    <!-- A/B Site Router — MUST be first script. Decides VSL vs Form 50/50 and redirects if needed. -->
+    <script src="ab-router.js"></script>
+    <!-- A/B Test Engine — load before styles to prevent flicker -->
+    <script src="ab-test.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '904643748902958');
+    fbq('init', '807788339068966');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=904643748902958&ev=PageView&noscript=1"
+    /></noscript>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=807788339068966&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WQ45J7FN');</script>
+    <!-- End Google Tag Manager -->
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQ45J7FN"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Secret confetti button -->
+    <!-- confetti-btn removed, logo triggers confetti instead -->
+    <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;"></canvas>
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        var btn = document.querySelector('.hero-logo');
+        var canvas = document.getElementById('confetti-canvas');
+        if (!btn || !canvas) return;
+        var ctx = canvas.getContext('2d');
+        var pieces = [], running = false;
+        var colors = ['#2563eb','#10B981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4'];
+        function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+        btn.style.cursor = 'pointer';
+        function Piece(){
+            this.x = Math.random() * canvas.width;
+            this.y = -10 - Math.random() * canvas.height * 0.5;
+            this.w = 4 + Math.random() * 6;
+            this.h = 3 + Math.random() * 4;
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.vy = 2 + Math.random() * 3;
+            this.vx = -1.5 + Math.random() * 3;
+            this.rot = Math.random() * 360;
+            this.rv = -3 + Math.random() * 6;
+        }
+        function draw(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var alive = false;
+            for(var i = 0; i < pieces.length; i++){
+                var p = pieces[i];
+                p.x += p.vx; p.y += p.vy; p.rot += p.rv; p.vy += 0.04;
+                if(p.y < canvas.height + 20){ alive = true; }
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+                ctx.restore();
+            }
+            if(alive){ requestAnimationFrame(draw); } else { running = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        }
+        btn.addEventListener('click', function(){
+            pieces = [];
+            for(var i = 0; i < 200; i++) pieces.push(new Piece());
+            if(!running){ running = true; draw(); }
+        });
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        document.body.addEventListener('click', function(e){
+            if (e.target.id !== 'secret-p' && (!e.target.closest || !e.target.closest('#secret-p'))) return;
+            var body = document.body;
+            body.style.transition = 'filter 0.3s ease, transform 0.3s ease';
+            body.style.filter = 'hue-rotate(180deg) invert(1)';
+            body.style.transform = 'rotate(1deg) scale(1.02)';
+            setTimeout(function(){
+                body.style.filter = 'blur(3px) saturate(3)';
+                body.style.transform = 'rotate(-1deg) scale(0.98)';
+            }, 800);
+            setTimeout(function(){
+                body.style.filter = 'hue-rotate(90deg)';
+                body.style.transform = 'skewX(2deg)';
+            }, 1600);
+            setTimeout(function(){
+                body.style.transition = 'filter 0.5s ease, transform 0.5s ease';
+                body.style.filter = '';
+                body.style.transform = '';
+            }, 2400);
+        });
+    });
+    </script>
+
+    <!-- SECTION 1: HERO -->
+    <section class="hero" id="hero">
+        <!-- Animated Gradient Background -->
+        <div class="moving-gradient-hero">
+            <div class="gradient-base"></div>
+            <div class="wave-layer wave-1"></div>
+            <div class="wave-layer wave-2"></div>
+            <div class="wave-layer wave-3"></div>
+            <div class="wave-layer wave-4"></div>
+            <div class="wave-layer wave-5"></div>
+            <div class="gradient-overlay"></div>
+        </div>
+
+        <div class="container">
+            <div class="hero-content-centered">
+                <div class="hero-text-col">
+                    <img src="BASEAIM BLACK.png" alt="Baseaim" class="hero-logo">
+                    <h1 class="headline">Accountants <span class="listen-up-highlight">Listen up</span><span class="headline-br-top" style="display:block;height:0.5 em;"></span><span class="headline-highlight">We will get you 3+ clients Every single Month</span><span class="headline-br-bottom" style="display:block;height:0.6em;"></span>so you can focus on your service while making multiple, 5-6 figures a month.</h1>
+
+                    <p class="video-intro">Only for Australian Accounting Firms</p>
+
+                </div>
+
+                <!-- MODAL TEST: Hero CTA -->
+                <div class="hero-cta-placeholder" id="hero-cta">
+                    <button class="btn btn-primary" onclick="openModal()">Book My Free Strategy Call</button>
+                </div>
+
+                <div class="scroll-arrow" onclick="document.getElementById('frustration').scrollIntoView({behavior:'smooth'})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+
+                <!-- REVIEW SLIDER TEMPORARILY REMOVED
+                <div class="review-slider" aria-label="Recent platform ratings">
+                    <div class="slider-track">
+                        <img src="588-5885660_adding-trustpilot-image-next-to-logo-on-supply__1_-removebg-preview.png" alt="Trustpilot review summary for Baseaim" class="review-logo">
+                        <img src="45-454316_google-5-star-review-hd-png-download-removebg-preview.png" alt="Google reviews showing five stars" class="review-logo">
+                        <img src="18-181292_facebook-5-star-reviews-hd-png-download-removebg-preview.png" alt="Facebook reviews showing five stars" class="review-logo">
+                        <img src="Clutch-5StarLg-480x274.png" alt="Clutch five star verified reviews" class="review-logo">
+                        <img src="588-5885660_adding-trustpilot-image-next-to-logo-on-supply__1_-removebg-preview.png" alt="" aria-hidden="true" class="review-logo">
+                        <img src="45-454316_google-5-star-review-hd-png-download-removebg-preview.png" alt="" aria-hidden="true" class="review-logo">
+                        <img src="18-181292_facebook-5-star-reviews-hd-png-download-removebg-preview.png" alt="" aria-hidden="true" class="review-logo">
+                        <img src="Clutch-5StarLg-480x274.png" alt="" aria-hidden="true" class="review-logo">
+                    </div>
+                </div>
+                -->
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: FRUSTRATION & DIAGNOSIS -->
+    <section class="trust-story" id="frustration">
+        <div class="container">
+            <h2 class="section-eyebrow">What We Found Out</h2>
+<div class="insight-grid frustration-layout">
+                <div class="story-content frustration-card">
+                    <p class="panel-tag pain-point-tag">Pain Point</p>
+                    <p class="card-eyebrow">It properly feels like:</p>
+                    <ul class="pain-point-list">
+                        <li><strong>Frustrated:</strong> because you&rsquo;ve tried to grow, yet revenue stays in the same range.</li>
+                        <li><strong>Burnt out:</strong> because you&rsquo;re working hard but progress feels slow</li>
+                        <li><strong>Uncertain:</strong> because there&rsquo;s so much conflicting marketing advice it&rsquo;s hard to know what works</li>
+                        <li><strong>Behind:</strong> because other firms seem to be growing faster than you expected</li>
+                        <li><strong>Skeptical:</strong> because you&rsquo;ve spent thousands on marketing that didn&rsquo;t work</li>
+                    </ul>
+                </div>
+
+                <div class="insight-panel diagnosis-panel">
+                    <p class="panel-tag">Diagnosis</p>
+                    <h3>Here&rsquo;s why growth feels stagnant</h3>
+                    <ul class="diagnosis-list">
+                        <li>
+                            <span class="diag-item-title">1. Waiting for Referrals</span>
+                            <span class="diag-item-note">&rarr; Low volume and unpredictable</span>
+                        </li>
+                        <li>
+                            <span class="diag-item-title">2. SEO and Website Upgrades</span>
+                            <span class="diag-item-note">&rarr; Long-term visibility&hellip; but slow and unpredictable</span>
+                        </li>
+                        <li>
+                            <span class="diag-item-title">3. Generic Marketing Agencies</span>
+                            <span class="diag-item-note">&rarr; Hiring agencies without any experience in the accounting industry</span>
+                        </li>
+                        <li>
+                            <span class="diag-item-title">4. Brand Awareness Campaigns</span>
+                            <span class="diag-item-note">&rarr; Numbers on a screen&hellip; but no predictable consultations</span>
+                        </li>
+                        <li>
+                            <span class="diag-item-title">5. Relying on Tax Season</span>
+                            <span class="diag-item-note">&rarr; Growth spikes briefly, then slows the rest of the year</span>
+                        </li>
+                    </ul>
+                    <p class="panel-outro">Passive growth sounds safe&hellip; but it leaves your firm with no control over when clients come in.</p>
+                </div>
+
+                <div class="insight-panel shift-panel">
+                    <p class="panel-tag">The Shift</p>
+                    <h3>What This System Does for Your Firm</h3>
+                    <ul class="diagnosis-list">
+                        <li>
+                            <span class="diag-item-title">&#10003; Predictable consultations with business owners</span>
+                            <span class="diag-item-note">&rarr; Qualified prospects booking directly into your calendar</span>
+                        </li>
+                        <li>
+                            <span class="diag-item-title">&#10003; Done-for-you client acquisition system</span>
+                            <span class="diag-item-note">&rarr; Ads, targeting, and booking infrastructure handled for you</span>
+                        </li>
+                        <li>
+                            <span class="diag-item-title">&#10003; Built specifically for accounting firms</span>
+                            <span class="diag-item-note">&rarr; Designed for firms with 3&ndash;12 staff</span>
+                        </li>
+                        <li>
+                            <span class="diag-item-title">&#10003; Performance-backed guarantee</span>
+                            <span class="diag-item-note">&rarr; If it doesn&rsquo;t work, we carry the risk</span>
+                        </li>
+                    </ul>
+                    <div class="limited-spots-pill">
+                        <span class="status-pulse" aria-hidden="true"></span>
+                        <span class="spots-text"><strong>3 spots</strong> left this month</span>
+                    </div>
+                    <div class="shift-panel-cta">
+                        <button class="btn btn-primary" onclick="scrollToBooking()">Book My Free Strategy Call</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- SECTION 3: HOW IT WORKS -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2>How it works</h2>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Jump on Your Strategy Call</h3>
+                    <p>We diagnose what&rsquo;s limiting growth today and align on the targets that matter.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Implement Our Proven System</h3>
+                    <p>We craft the positioning, campaigns, funnel, and follow-up engine for your firm.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Launch &amp; Consults</h3>
+                    <p>We go live, pre-qualify responses, and deliver booked consults straight to your calendar.</p>
+                </div>
+            </div>
+
+            <div class="section-cta">
+                <button class="btn btn-primary" onclick="scrollToBooking()">Book My Free Strategy Call</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: SOLUTION & GUARANTEE -->
+    <section class="guarantee" id="solution">
+        <div class="container">
+            <h2>What You&rsquo;re Gonna Get</h2>
+
+            <div class="acquisition-images">
+                <div class="acquisition-image-item">
+                    <div class="acquisition-image-placeholder">
+                        <img src="zoom meetings.jpeg" alt="Personalized breakdown">
+                    </div>
+                    <p class="acquisition-image-caption">Personalized Breakdown &amp; audit of your current situation To Pinpoint Your Main Bottleneck</p>
+                </div>
+                <div class="acquisition-image-item">
+                    <div class="acquisition-image-placeholder">
+                        <img src="dashboard.png" alt="Dashboard walkthrough">
+                    </div>
+                    <p class="acquisition-image-caption">Complete walkthrough of our marketing communication system</p>
+                </div>
+                <!-- Temporarily hidden
+                <div class="acquisition-image-item">
+                    <div class="acquisition-image-placeholder">
+                        <img src="recording ad.jpeg" alt="Custom created ads">
+                    </div>
+                    <p class="acquisition-image-caption">Custom created ads filmed and edited by our in-house team</p>
+                </div>
+                -->
+                <div class="acquisition-image-item">
+                    <div class="acquisition-image-placeholder">
+                        <img src="roadmap.png" alt="Personalized roadmap">
+                    </div>
+                    <p class="acquisition-image-caption">Personalized roadmap which shows you goals being achieved step by step</p>
+                </div>
+            </div>
+
+            <div class="guarantee-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="m9 12 2 2 4-4"/>
+                </svg>
+            </div>
+
+            <div class="guarantee-content">
+                <h3>Guaranteed results.</h3>
+                <p>If we don&rsquo;t deliver the agreed number of qualified booked calls, You Don&rsquo;t Pay.</p>
+            </div>
+
+            <div class="section-cta">
+                <button class="btn btn-primary" onclick="scrollToBooking()" style="display:inline-flex;flex-direction:column;align-items:center;gap:0.2rem;">
+                    <span>Book My Free Strategy Call</span>
+                    <span style="font-size:0.75rem;font-weight:400;opacity:0.85;letter-spacing:0.03em;">Refund Guaranteed</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="proof" id="proof">
+        <div class="container">
+            <div class="testimonials">
+                <h3>Testimonials from accounting firms</h3>
+                <div class="testimonial-grid">
+                    <div class="testimonial">
+                        <div class="testimonial-profile-row">
+                            <div class="testimonial-profile">
+                                <img src="micheal r.png" alt="Michael R headshot">
+                            </div>
+                            <p class="testimonial-author">&ndash; Michael R, Partner</p>
+                        </div>
+                        <p class="testimonial-title"><strong>Predictable Consultations</strong></p>
+                        <span class="testimonial-score"><span class="star-rating" data-rating="4.7"></span><span>4.7</span></span>
+                        <p class="testimonial-text">&ldquo;For years our new clients mostly came from referrals. Some months we&rsquo;d get a few enquiries, other months nothing. After working with the team, we started getting <strong>consistent consultations</strong> booked each month and it completely changed how we think about growth.&rdquo;</p>
+                        <p class="testimonial-date">20th March 2025</p>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-profile-row">
+                            <div class="testimonial-profile testimonial-initials" style="background:#d0e4ff;color:#1a56a0;">SM</div>
+                            <p class="testimonial-author">&ndash; Sarah M, Firm Manager</p>
+                        </div>
+                        <p class="testimonial-title"><strong>They Really Delivered</strong></p>
+                        <span class="testimonial-score"><span class="star-rating" data-rating="4.9"></span><span>4.9</span></span>
+                        <p class="testimonial-text">&ldquo;They booked 39 consultations for us over about 6 months and we ended up onboarding <strong>21 new clients</strong>. What impressed me most was how transparent they were with marketing strategies.&rdquo;</p>
+                        <p class="testimonial-date">19th September 2025</p>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-profile-row">
+                            <div class="testimonial-profile">
+                                <img src="tommy s.png" alt="Tommy S headshot">
+                            </div>
+                            <p class="testimonial-author">&ndash; Tommy S, Senior Accountant</p>
+                        </div>
+                        <p class="testimonial-title"><strong>Reliable Pipeline System</strong></p>
+                        <span class="testimonial-score"><span class="star-rating" data-rating="4.3"></span><span>4.3</span></span>
+                        <p class="testimonial-text">&ldquo;Before this we had no real system for bringing in new business. Everything depended on referrals or the occasional enquiry through the website. Now we have a <strong>steady pipeline</strong> of consultations and we can actually plan hiring and growth properly.&rdquo;</p>
+                        <p class="testimonial-date">12th January 2026</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta">
+                <button class="btn btn-primary" onclick="scrollToBooking()">Book My Free Strategy Call</button>
+            </div>
+        </div>
+    </section>
+   
+
+   
+    <section class="decision-bridge" id="decision">
+        <div class="container">
+            <h2>If You&rsquo;re Thinking...</h2>
+            <ul class="benefits">
+                <li>&ldquo;This is exactly what&rsquo;s been frustrating me.&rdquo;</li>
+                <li>&ldquo;We don&rsquo;t need more leads, we need better clients.&rdquo;</li>
+                <li>&ldquo;I just want predictable growth.&rdquo;</li>
+            </ul>
+            <p>Then it&rsquo;s probably time to schedule a strategy call and look at this properly.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 7: CTA -->
+    <section class="cta-simple" id="cta">
+        <div class="container">
+            <h2>Book a Strategy Call</h2>
+            <p>On this call, we&rsquo;ll:</p>
+            <ul class="benefits">
+                <li>Identify what&rsquo;s actually limiting your growth</li>
+                <li>Map the acquisition system your firm needs</li>
+                <li>Break down how 3+ new clients per month becomes predictable</li>
+            </ul>
+            <p>No pressure. No fluff. Just clarity.</p>
+            <div class="section-cta">
+                <button class="btn btn-primary" onclick="scrollToBooking()">Book My Free Strategy Call</button>
+            </div>
+        </div>
+    </section>
+
+
+<!-- SECTION 8: FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">What counts as a qualified lead?</button>
+                    <div class="faq-answer">
+                        <p>A local business owner who fits your service criteria, has expressed intent, and books a consultation.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">Do you only work with Accounting Firms?</button>
+                    <div class="faq-answer">
+                        <p>Yes. Everything we build is tailored specifically for Accounting Firms serving local businesses.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">How much ad spend is required?</button>
+                    <div class="faq-answer">
+                        <p>Ad spend varies by location, but we'll give clear guidance during the call.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">What if we're in a smaller market?</button>
+                    <div class="faq-answer">
+                        <p>We'll assess this upfront and tell you honestly if it's viable.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">Do you handle the sales calls?</button>
+                    <div class="faq-answer">
+                        <p>No, leads book directly into your calendar, and your team runs the consultation.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">How fast can we launch?</button>
+                    <div class="faq-answer">
+                        <p>Typically within 7–14 days after onboarding.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta">
+                <button class="btn btn-primary" onclick="scrollToBooking()">Book My Free Strategy Call</button>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- FOOTER -->
+    <footer class="logo-footer">
+        <div class="container">
+            <img src="logo-black.png" alt="Baseaim" class="logo">
+            <div class="footer-content">
+                <p class="footer-tagline">Predictable client acquisition for Australian Accounting Firms</p>
+                <p class="footer-link">Visit our website at <a href="https://baseaim.co" target="_blank" rel="noopener noreferrer">baseaim.co</a></p>
+                <p class="footer-copyright">&copy; 2026 Baseaim. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Mobile CTA -->
+    <div class="sticky-cta" id="sticky-cta">
+        <button class="btn btn-primary" onclick="scrollToBooking()">Book My Free Strategy Call</button>
+    </div>
+
+    <script>
+    // --- MODAL TEST START ---
+    function openModal() {
+        document.getElementById('modal-overlay').classList.add('modal-open');
+        document.body.style.overflow = 'hidden';
+        if (window.BASEAIM_TRACK && typeof window.BASEAIM_TRACK.modalOpened === 'function') {
+            window.BASEAIM_TRACK.modalOpened();
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('modal-overlay').classList.remove('modal-open');
+        document.body.style.overflow = '';
+    }
+
+    // Redirect all existing CTAs to open the modal
+    function scrollToBooking() {
+        openModal();
+    }
+
+    // --- MODAL TEST END ---
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Lead form validation & submission ---
+        var form = document.getElementById('lead-form-el');
+        var btn = document.getElementById('schedule-btn');
+        var firmInput = document.getElementById('firm-name');
+        var emailInput = document.getElementById('email');
+        var phoneInput = document.getElementById('phone');
+        var challengeInput = document.getElementById('challenge');
+
+        function checkFormValid() {
+            var valid = firmInput.value.trim() !== '' &&
+                        emailInput.value.trim() !== '' &&
+                        emailInput.validity.valid &&
+                        phoneInput.value.trim() !== '' &&
+                        challengeInput.value !== '';
+            btn.disabled = !valid;
+        }
+
+        firmInput.addEventListener('input', checkFormValid);
+        emailInput.addEventListener('input', checkFormValid);
+        phoneInput.addEventListener('input', checkFormValid);
+
+        // --- Custom dropdown ---
+        var selectEl = document.getElementById('custom-select');
+        var trigger = document.getElementById('select-trigger');
+        var valueSpan = document.getElementById('select-value');
+        var optionsList = document.getElementById('select-options');
+        var options = optionsList.querySelectorAll('li');
+
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            var isOpen = selectEl.classList.contains('open');
+            closeAllDropdowns();
+            if (!isOpen) {
+                selectEl.classList.add('open');
+                trigger.setAttribute('aria-expanded', 'true');
+            }
+        });
+
+        options.forEach(function(opt) {
+            opt.addEventListener('click', function() {
+                var val = this.getAttribute('data-value');
+                var text = this.textContent;
+                challengeInput.value = val;
+                valueSpan.textContent = text;
+                valueSpan.classList.add('has-value');
+                selectEl.classList.remove('open');
+                trigger.setAttribute('aria-expanded', 'false');
+
+                // Mark selected
+                options.forEach(function(o) { o.classList.remove('selected'); });
+                this.classList.add('selected');
+
+                checkFormValid();
+                debouncedPartial();
+            });
+        });
+
+        function closeAllDropdowns() {
+            selectEl.classList.remove('open');
+            trigger.setAttribute('aria-expanded', 'false');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!selectEl.contains(e.target)) {
+                closeAllDropdowns();
+            }
+        });
+
+        // Keyboard support
+        trigger.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAllDropdowns();
+        });
+
+        // --- Partial form data capture (Sheet 2 via Apps Script) ---
+        var PARTIAL_URL = 'https://script.google.com/macros/s/AKfycbzoqteR0v3ZXjG-h0GT72etlPnJKPwxfaGAhmX2BrERO9XRq1hhMZ4rMlrtiZzYaDu6hg/exec';
+        var sessionId = 'sid_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+        var formSubmitted = false;
+        var partialTimer = null;
+
+        function sendPartialData() {
+            if (formSubmitted) return;
+            var fn = firmInput.value.trim();
+            var em = emailInput.value.trim();
+            var ph = phoneInput.value.trim();
+            var rev = challengeInput.value;
+            if (!fn && !em && !ph && !rev) return;
+
+            fetch(PARTIAL_URL + '?sessionId=' + encodeURIComponent(sessionId) +
+                '&firmName=' + encodeURIComponent(fn) +
+                '&email=' + encodeURIComponent(em) +
+                '&phone=' + encodeURIComponent(ph) +
+                '&revenue=' + encodeURIComponent(rev), {
+                mode: 'no-cors'
+            }).catch(function() {});
+        }
+
+        function debouncedPartial() {
+            clearTimeout(partialTimer);
+            partialTimer = setTimeout(sendPartialData, 1000);
+        }
+
+        firmInput.addEventListener('blur', debouncedPartial);
+        emailInput.addEventListener('blur', debouncedPartial);
+        phoneInput.addEventListener('blur', debouncedPartial);
+
+        form.addEventListener('submit', function(e) {
+            formSubmitted = true;
+            e.preventDefault();
+            if (btn.disabled) return;
+
+            var firmName = firmInput.value.trim();
+            var email = emailInput.value.trim();
+            var phone = phoneInput.value.trim();
+            var revenue = challengeInput.value;
+
+            // Send lead data to n8n webhook
+            fetch('https://n8n.ryderagency.com/webhook/74d6152a-1264-4712-9836-7100c7495b62', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firmName: firmName,
+                    email: email,
+                    phone: phone,
+                    revenue: revenue
+                })
+            }).catch(function() {});
+
+            // Transform modal to Cal.com booking
+            var calBase = 'https://cal.com/team/baseaim/khan';
+            var calParams = [];
+            if (firmName) calParams.push('name=' + encodeURIComponent(firmName));
+            if (email) calParams.push('email=' + encodeURIComponent(email));
+            if (phone) calParams.push('phone=' + encodeURIComponent(phone));
+            // Tag the booking with the A/B variant so the Cal.com webhook payload carries it
+            var abVariant = (window.BASEAIM_AB && window.BASEAIM_AB.variant) || 'form';
+            calParams.push('metadata[ab_variant]=' + encodeURIComponent(abVariant));
+            calParams.push('metadata[ab_site]=form');
+            var calUrl = calBase + (calParams.length ? '?' + calParams.join('&') : '');
+
+            var container = document.querySelector('.modal-container');
+            container.classList.add('modal-booking');
+            document.getElementById('modal-overlay').classList.add('modal-booking-open');
+            container.innerHTML =
+                '<div class="modal-cal-header">' +
+                    '<img src="BASEAIM BLACK.png" alt="Baseaim" class="modal-cal-logo">' +
+                    '<h2 class="modal-cal-title">Book Your <span>Strategy Call</span></h2>' +
+                    '<p class="modal-cal-sub">Choose a time that works for you — we\'ll handle the rest.</p>' +
+                '</div>' +
+                '<div class="modal-cal-embed">' +
+                    '<iframe src="' + calUrl + '" class="modal-cal-iframe" title="Book a strategy call"></iframe>' +
+                '</div>';
+
+            // Canonical conversion event (GA4 / GTM, tagged with ab_variant)
+            if (window.BASEAIM_TRACK && typeof window.BASEAIM_TRACK.leadSubmit === 'function') {
+                window.BASEAIM_TRACK.leadSubmit({
+                    firm_name: firmName,
+                    revenue: revenue,
+                    has_phone: !!phone
+                });
+            }
+
+            // Track form submission with Meta Pixel
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Lead', {
+                    content_name: 'Strategy Call Form',
+                    firm_name: firmName,
+                    challenge: revenue,
+                    ab_variant: (window.BASEAIM_AB && window.BASEAIM_AB.variant) || 'form',
+                    ab_test_name: 'vsl_vs_form'
+                });
+            }
+        });
+
+        // --- FAQ accordion ---
+        var faqButtons = document.querySelectorAll('.faq-question');
+        faqButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var item = this.parentElement;
+                var isOpen = item.classList.contains('active');
+
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(function(el) {
+                    el.classList.remove('active');
+                });
+
+                // Toggle clicked
+                if (!isOpen) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    });
+    </script>
+
+    <!-- MODAL TEST START -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal-container">
+        <div class="lead-form-wrapper" id="lead-form">
+            <div class="lead-form-card">
+                <h3 class="lead-form-heading">Get Your Free Strategy Call</h3>
+                <form id="lead-form-el" autocomplete="on" novalidate>
+                    <div class="form-group">
+                        <label for="firm-name">Firm Name</label>
+                        <input type="text" id="firm-name" name="firm-name" placeholder="e.g. Smith & Co Accounting" required autocomplete="organization">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="you@yourfirm.com.au" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+61 4XX XXX XXX" required autocomplete="tel">
+                    </div>
+                    <div class="form-group">
+                        <label>Annual Firm Revenue</label>
+                        <input type="hidden" id="challenge" name="revenue" value="">
+                        <div class="custom-select" id="custom-select">
+                            <button type="button" class="custom-select-trigger" id="select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                                <span class="custom-select-value" id="select-value">Select your firm's annual revenue...</span>
+                                <svg class="custom-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <ul class="custom-select-options" id="select-options" role="listbox">
+                                <li data-value="under-250k" role="option">Under $250k</li>
+                                <li data-value="250k-1m" role="option">$250k – $1M</li>
+                                <li data-value="1m-3m" role="option">$1M – $3M</li>
+                                <li data-value="3m-plus" role="option">$3M+</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-submit-section">
+                        <p class="final-step-label">One Final Step</p>
+                        <button type="submit" class="btn btn-primary lead-form-btn" id="schedule-btn" disabled>
+                            <span>Schedule My Call</span>
+                            <span class="btn-subtext">✓ Refund Guaranteed</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL TEST END -->
+
+</body>
+</html>

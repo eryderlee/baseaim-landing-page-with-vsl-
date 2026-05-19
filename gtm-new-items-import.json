@@ -1,0 +1,345 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2026-05-19 14:30:00",
+  "containerVersion": {
+    "path": "accounts/6337043350/containers/242322401/versions/0",
+    "accountId": "6337043350",
+    "containerId": "242322401",
+    "containerVersionId": "0",
+    "container": {
+      "path": "accounts/6337043350/containers/242322401",
+      "accountId": "6337043350",
+      "containerId": "242322401",
+      "name": "www.vsl.baseaim.co",
+      "publicId": "GTM-WQ45J7FN",
+      "usageContext": ["WEB"],
+      "fingerprint": "0",
+      "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6337043350/containers/242322401/workspaces?apiLink=container"
+    },
+    "tag": [
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "tagId": "100",
+        "name": "GA4 - Lead Submit",
+        "type": "gaawe",
+        "parameter": [
+          { "type": "BOOLEAN", "key": "sendEcommerceData", "value": "false" },
+          { "type": "TEMPLATE", "key": "eventName", "value": "lead_submit" },
+          { "type": "TEMPLATE", "key": "measurementIdOverride", "value": "G-6SBQ0EEMTC" },
+          {
+            "type": "LIST",
+            "key": "eventParameters",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_variant" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_test_variant}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_test_name" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_test_name}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_site" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_site}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "revenue_band" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - revenue}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "firm_name" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - firm_name}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "has_phone" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - has_phone}}" }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": ["100"],
+        "monitoringMetadata": { "type": "MAP" },
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "tagId": "101",
+        "name": "GA4 - Cal Booking Confirmed",
+        "type": "gaawe",
+        "parameter": [
+          { "type": "BOOLEAN", "key": "sendEcommerceData", "value": "false" },
+          { "type": "TEMPLATE", "key": "eventName", "value": "cal_booking_confirmed" },
+          { "type": "TEMPLATE", "key": "measurementIdOverride", "value": "G-6SBQ0EEMTC" },
+          {
+            "type": "LIST",
+            "key": "eventParameters",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_variant" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_test_variant}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_test_name" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_test_name}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_site" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_site}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "booking_uid" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - booking_uid}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "event_type_slug" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - event_type_slug}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "cal_event_type" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - cal_event_type}}" }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": ["101"],
+        "monitoringMetadata": { "type": "MAP" },
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "tagId": "102",
+        "name": "GA4 - Lead Modal Opened",
+        "type": "gaawe",
+        "parameter": [
+          { "type": "BOOLEAN", "key": "sendEcommerceData", "value": "false" },
+          { "type": "TEMPLATE", "key": "eventName", "value": "lead_modal_opened" },
+          { "type": "TEMPLATE", "key": "measurementIdOverride", "value": "G-6SBQ0EEMTC" },
+          {
+            "type": "LIST",
+            "key": "eventParameters",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_variant" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_test_variant}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_test_name" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_test_name}}" }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  { "type": "TEMPLATE", "key": "name", "value": "ab_site" },
+                  { "type": "TEMPLATE", "key": "value", "value": "{{dlv - ab_site}}" }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": ["102"],
+        "monitoringMetadata": { "type": "MAP" },
+        "fingerprint": "0"
+      }
+    ],
+    "trigger": [
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "triggerId": "100",
+        "name": "CE - Lead Submit",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
+              { "type": "TEMPLATE", "key": "arg1", "value": "lead_submit" }
+            ]
+          }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "triggerId": "101",
+        "name": "CE - Cal Booking Confirmed",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
+              { "type": "TEMPLATE", "key": "arg1", "value": "cal_booking_confirmed" }
+            ]
+          }
+        ],
+        "fingerprint": "0"
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "triggerId": "102",
+        "name": "CE - Lead Modal Opened",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "TEMPLATE", "key": "arg0", "value": "{{_event}}" },
+              { "type": "TEMPLATE", "key": "arg1", "value": "lead_modal_opened" }
+            ]
+          }
+        ],
+        "fingerprint": "0"
+      }
+    ],
+    "variable": [
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "variableId": "100",
+        "name": "dlv - ab_site",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "ab_site" }
+        ],
+        "fingerprint": "0",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "variableId": "101",
+        "name": "dlv - revenue",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "revenue" }
+        ],
+        "fingerprint": "0",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "variableId": "102",
+        "name": "dlv - firm_name",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "firm_name" }
+        ],
+        "fingerprint": "0",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "variableId": "103",
+        "name": "dlv - has_phone",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "has_phone" }
+        ],
+        "fingerprint": "0",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "variableId": "104",
+        "name": "dlv - booking_uid",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "booking_uid" }
+        ],
+        "fingerprint": "0",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "variableId": "105",
+        "name": "dlv - event_type_slug",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "event_type_slug" }
+        ],
+        "fingerprint": "0",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6337043350",
+        "containerId": "242322401",
+        "variableId": "106",
+        "name": "dlv - cal_event_type",
+        "type": "v",
+        "parameter": [
+          { "type": "INTEGER", "key": "dataLayerVersion", "value": "2" },
+          { "type": "BOOLEAN", "key": "setDefaultValue", "value": "false" },
+          { "type": "TEMPLATE", "key": "name", "value": "cal_event_type" }
+        ],
+        "fingerprint": "0",
+        "formatValue": {}
+      }
+    ],
+    "fingerprint": "0",
+    "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6337043350/containers/242322401/versions/0?apiLink=version"
+  }
+}

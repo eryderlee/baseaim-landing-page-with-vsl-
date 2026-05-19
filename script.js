@@ -39,14 +39,23 @@
             };
         })(window, 'https://app.cal.com/embed/embed.js', 'init');
 
+        // Read the cross-site A/B variant (set by ab-router.js). Fall back to
+        // 'vsl' since this script only runs on the VSL variant.
         var abVariant;
-        try { abVariant = localStorage.getItem('ab_variant') || 'A'; }
-        catch (e) { abVariant = 'A'; }
+        try { abVariant = localStorage.getItem('baseaim_page_variant') || 'vsl'; }
+        catch (e) { abVariant = 'vsl'; }
 
         Cal('init', 'khan', { origin: 'https://cal.com' });
         Cal.ns.khan('inline', {
             elementOrSelector: '#my-cal-inline',
-            config: { layout: 'month_view', metadata: { ab_variant: abVariant } },
+            config: {
+                layout: 'month_view',
+                metadata: {
+                    ab_variant: abVariant,
+                    ab_site: 'vsl',
+                    ab_test_name: 'vsl_vs_form'
+                }
+            },
             calLink: 'team/baseaim/khan'
         });
     }

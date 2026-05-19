@@ -1,3 +1,8 @@
 Final VSl (1).mov
 *.mov
 *.MOV
+
+# Agent / editor tooling artifacts (shouldn't ship to Netlify)
+.claude/
+.playwright-mcp/
+.vscode/

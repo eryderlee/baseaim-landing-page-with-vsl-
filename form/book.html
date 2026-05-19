@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Strategy Call - Baseaim</title>
+    <meta name="description" content="Schedule your free strategy call with Baseaim. We'll map out a predictable client acquisition system for your accounting firm.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '904643748902958');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=904643748902958&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-blue: #2563eb;
+            --text-dark: #0a0a0a;
+            --text-medium: #374151;
+            --text-light: #6b7280;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Gradient Background */
+        .moving-gradient-hero {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .gradient-base {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center,
+                #FFFFFF 0%,
+                #FFFFFF 40%,
+                #F8FCFF 60%,
+                #E1F5FE 80%,
+                #87CEEB 100%);
+            opacity: 1;
+        }
+
+        .wave-layer {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50% 40% 60% 30%;
+            filter: blur(25px);
+            opacity: 0.5;
+            animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            contain: layout style paint;
+        }
+
+        @supports (-moz-appearance:none) {
+            .wave-layer { filter: blur(20px); }
+        }
+
+        .wave-1 {
+            background: linear-gradient(45deg,
+                rgba(10, 46, 110, 0.9) 0%,
+                rgba(79, 195, 247, 0.7) 50%,
+                rgba(135, 206, 235, 0.5) 100%);
+            top: -30%;
+            left: -30%;
+            animation: wave-drift-1 45s infinite linear;
+            transform-origin: center center;
+        }
+
+        .wave-2 {
+            background: linear-gradient(-45deg,
+                rgba(135, 206, 235, 0.5) 0%,
+                rgba(107, 182, 255, 0.7) 50%,
+                rgba(10, 46, 110, 0.9) 100%);
+            bottom: -30%;
+            right: -30%;
+            animation: wave-drift-2 60s infinite linear reverse;
+            transform-origin: center center;
+        }
+
+        .wave-3 {
+            background: linear-gradient(90deg,
+                rgba(107, 182, 255, 0.6) 0%,
+                rgba(135, 206, 235, 0.7) 30%,
+                rgba(10, 46, 110, 0.5) 70%,
+                rgba(79, 195, 247, 0.6) 100%);
+            top: -20%;
+            right: -20%;
+            width: 60%;
+            height: 60%;
+            animation: wave-drift-3 50s infinite linear;
+            transform-origin: center center;
+        }
+
+        .wave-4 {
+            background: linear-gradient(180deg,
+                rgba(10, 46, 110, 0.8) 0%,
+                rgba(107, 182, 255, 0.6) 50%,
+                rgba(176, 224, 230, 0.4) 100%);
+            top: 60%;
+            left: -25%;
+            width: 50%;
+            height: 70%;
+            animation: wave-drift-1 55s infinite linear reverse;
+            transform-origin: center center;
+        }
+
+        .wave-5 {
+            background: linear-gradient(270deg,
+                rgba(79, 195, 247, 0.7) 0%,
+                rgba(135, 206, 235, 0.5) 50%,
+                rgba(107, 182, 255, 0.6) 100%);
+            bottom: -10%;
+            left: 50%;
+            width: 55%;
+            height: 60%;
+            animation: wave-drift-2 48s infinite linear;
+            transform-origin: center center;
+        }
+
+        .gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center,
+                transparent 0%,
+                transparent 50%,
+                rgba(227, 242, 253, 0.1) 80%,
+                rgba(187, 222, 251, 0.15) 100%);
+            animation: overlay-pulse 40s infinite alternate;
+        }
+
+        @keyframes wave-drift-1 {
+            0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50%  { transform: translate3d(20px, -10px, 0) rotate(180deg); }
+            100% { transform: translate3d(0, 0, 0) rotate(360deg); }
+        }
+
+        @keyframes wave-drift-2 {
+            0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50%  { transform: translate3d(-15px, 10px, 0) rotate(180deg); }
+            100% { transform: translate3d(0, 0, 0) rotate(360deg); }
+        }
+
+        @keyframes wave-drift-3 {
+            0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50%  { transform: translate3d(15px, 8px, 0) rotate(180deg); }
+            100% { transform: translate3d(0, 0, 0) rotate(360deg); }
+        }
+
+        @keyframes overlay-pulse {
+            0%   { opacity: 0.3; transform: scale(1); }
+            50%  { opacity: 0.5; transform: scale(1.02); }
+            100% { opacity: 0.3; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .wave-layer { filter: blur(40px); opacity: 0.3; }
+            .wave-1 { animation-duration: 60s; }
+            .wave-2 { animation-duration: 75s; }
+            .wave-3 { animation-duration: 65s; }
+            .wave-4, .wave-5 { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .wave-layer { animation: none; }
+            .gradient-overlay { animation: none; }
+        }
+
+        .booking-header {
+            text-align: center;
+            padding: 2rem 1.5rem 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .booking-logo {
+            height: 36px;
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .booking-header h1 span {
+            background: linear-gradient(135deg, #2563eb, #0052CC);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .booking-header p {
+            font-size: 1.05rem;
+            color: var(--text-medium);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .booking-name {
+            display: inline-block;
+            background: #eef4ff;
+            border: 1px solid #d4e3fc;
+            border-radius: 8px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--primary-blue);
+            margin-top: 0.75rem;
+        }
+
+        .cal-container {
+            flex: 1;
+            max-width: 960px;
+            width: 100%;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cal-container iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 650px;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            background: #fff;
+        }
+
+        .booking-footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .booking-footer a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .booking-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .booking-footer p {
+            margin-bottom: 0.3rem;
+        }
+
+        @media (max-width: 640px) {
+            .booking-header {
+                padding: 1.5rem 1rem 0.75rem;
+            }
+
+            .cal-container {
+                padding: 0 0.75rem;
+                margin: 1rem auto;
+            }
+
+            .cal-container iframe {
+                min-height: 580px;
+                border-radius: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Gradient Background -->
+    <div class="moving-gradient-hero">
+        <div class="gradient-base"></div>
+        <div class="wave-layer wave-1"></div>
+        <div class="wave-layer wave-2"></div>
+        <div class="wave-layer wave-3"></div>
+        <div class="wave-layer wave-4"></div>
+        <div class="wave-layer wave-5"></div>
+        <div class="gradient-overlay"></div>
+    </div>
+
+    <header class="booking-header">
+        <img src="logo-black.png" alt="Baseaim" class="booking-logo">
+        <h1>Book Your <span>Strategy Call</span></h1>
+        <p>Choose a time that works for you — we'll handle the rest.</p>
+        <div class="booking-name" id="greeting" style="display:none;"></div>
+    </header>
+
+    <div class="cal-container">
+        <iframe id="cal-iframe" title="Schedule a strategy call with Baseaim"></iframe>
+    </div>
+
+    <footer class="booking-footer">
+        <p>For any other enquiries, email <a href="mailto:info@baseaim.co">info@baseaim.co</a></p>
+        <p>&copy; 2026 Baseaim. All rights reserved.</p>
+    </footer>
+
+    <script>
+    (function() {
+        var params = new URLSearchParams(window.location.search);
+        var name = params.get('name') || '';
+        var email = params.get('email') || '';
+
+        // Build Cal.com URL with pre-filled fields
+        var calBase = 'https://cal.com/team/baseaim/khan';
+        var calParams = [];
+        if (name) calParams.push('name=' + encodeURIComponent(name));
+        if (email) calParams.push('email=' + encodeURIComponent(email));
+        var calUrl = calBase + (calParams.length ? '?' + calParams.join('&') : '');
+
+        document.getElementById('cal-iframe').src = calUrl;
+
+        // Show personalized greeting
+        if (name) {
+            var greeting = document.getElementById('greeting');
+            greeting.textContent = 'Booking for ' + name;
+            greeting.style.display = 'inline-block';
+        }
+
+        // Track booking page view with Meta Pixel
+        if (typeof fbq !== 'undefined') {
+            fbq('trackCustom', 'BookingPageViewed', {
+                firm_name: name,
+                email: email
+            });
+        }
+    })();
+    </script>
+</body>
+</html>
